@@ -42,8 +42,16 @@ import {
   BsPauseFill,
   BsStopFill,
   BsVolumeMute,
-  BsVolumeUp
+  BsVolumeUp,
+  BsFullscreen,
+  BsFullscreenExit,
+  BsPip
 } from 'react-icons/bs';
+
+import {
+  RiPictureInPicture2Line,
+  RiPictureInPictureExitLine
+} from 'react-icons/ri';
 
 export const PasswordShowIcon = EyeOutlined;
 export const PasswordHideIcon = EyeInvisibleOutlined;
@@ -89,3 +97,7 @@ export const StopIcon = BsStopFill;
 export const ReloadIcon = ReloadOutlined;
 export const VolumeMutedIcon = BsVolumeMute;
 export const VolumeUnmutedIcon = BsVolumeUp;
+export const FullScreenIcon = BsFullscreen;
+export const ExitFullScreenIcon = BsFullscreenExit;
+export const PictureInPictureIcon = RiPictureInPicture2Line;
+export const ExitPictureInPictureIcon = RiPictureInPictureExitLine;

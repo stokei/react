@@ -11,27 +11,27 @@ export const InputPassword: React.FC<InputPasswordProps> = ({
   const [isShow, setIsShow] = useState(false);
   const [showPasswordValue, setShowPasswordValue] = useState('');
 
-  const handleChange = (e: any) => {
+  const onChange = (e: any) => {
     if (onChange) {
       onChange(e);
     }
     setShowPasswordValue(e.target.value);
   };
 
-  const handleToggleShowPasswordClicked = () => {
+  const onToggleShowPasswordClicked = () => {
     setIsShow((show) => !show);
   };
 
   return (
     <Input
       {...props}
-      onChange={handleChange}
+      onChange={onChange}
       type="password"
       helperMessage={isShow && showPasswordValue}
       rightIcon={
         <Icon
           name={!isShow ? 'passwordHide' : 'passwordShow'}
-          onClick={handleToggleShowPasswordClicked}
+          onClick={onToggleShowPasswordClicked}
         />
       }
     />

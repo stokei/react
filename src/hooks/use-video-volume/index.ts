@@ -1,16 +1,32 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { useDisclosure } from '../use-disclosure';
 
+const DEFAULT_INITIAL_VOLUME = 0.5;
 export const useVideoVolume = () => {
-  const [volume, setVolume] = useState<number>(0);
-  const {
-    isOpen: isMuted,
-    onClose: onMute,
-    onOpen: onUnmute,
-    onToggle: onToggleMute
-  } = useDisclosure();
+  const [volume, setVolume] = useState<number>(DEFAULT_INITIAL_VOLUME);
 
-  const onChangeVolume = useCallback((vol: number) => setVolume(vol), []);
+  const isMuted = useMemo(() => volume === 0, [volume]);
+
+  const onChangeVolume = useCallback(
+    (vol: number) => setVolume(vol > 0 ? vol : 0),
+    []
+  );
+
+  const onMute = useCallback(() => {
+    setVolume(0);
+  }, []);
+
+  const onUnmute = useCallback(() => {
+    setVolume(DEFAULT_INITIAL_VOLUME);
+  }, []);
+
+  const onToggleMute = useCallback(() => {
+    if (!isMuted) {
+      onMute();
+    } else {
+      onUnmute();
+    }
+  }, [isMuted, onMute, onUnmute]);
 
   return {
     volume,

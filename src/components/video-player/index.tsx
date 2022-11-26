@@ -12,7 +12,12 @@ import { BigPlayButton } from './big-play-button';
 import { Controls } from './controls';
 import { Poster } from './poster';
 import { VideoPlayerProvider } from '../../contexts';
-import { useVideoPlaying, useVideoVolume } from '../../hooks';
+import {
+  useVideoPictureInPicture,
+  useVideoPlaying,
+  useVideoVolume,
+  useVideoFullScreen
+} from '../../hooks';
 
 export {
   Poster as VideoPlayerPoster,
@@ -54,9 +59,89 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [isVideoHover, setIsVideoHover] = useState<boolean>(false);
   const [isShowingControls, setIsShowingControls] = useState<boolean>(false);
-  const { isPlaying, onPlayingPause, onPlayingPlay, isFirstPlay } =
+  const { isPlaying, onPause, onPlay, onTogglePlaying, isFirstPlay } =
     useVideoPlaying();
   const { volume, isMuted, onToggleMute, onChangeVolume } = useVideoVolume();
+  const { isFullScreen, onToggleFullScreen, onCloseFullScreen } =
+    useVideoFullScreen();
+  const {
+    isPictureInPicture,
+    onTogglePictureInPicture,
+    onClosePictureInPicture
+  } = useVideoPictureInPicture();
+
+  const videoContainerID = id + '-video-container';
+
+  useEffect(() => {
+    if (isFullScreen) {
+      const element = document?.getElementById(videoContainerID);
+      element
+        ?.requestFullscreen({ navigationUI: 'hide' })
+        .catch((error) => console.log(error.message));
+    } else {
+      const isOpenFullScreen = document?.fullscreenElement;
+      if (isOpenFullScreen) {
+        document.exitFullscreen().catch((error) => console.log(error.message));
+      }
+    }
+  }, [videoContainerID, isFullScreen]);
+
+  useEffect(() => {
+    if (playerRef.current) {
+      playerRef.current.addEventListener('enterpictureinpicture', () => {
+        onCloseFullScreen();
+      });
+      playerRef.current.addEventListener('leavepictureinpicture', () => {
+        onClosePictureInPicture();
+      });
+    }
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.removeEventListener(
+          'enterpictureinpicture',
+          () => {}
+        );
+        playerRef.current.removeEventListener(
+          'leavepictureinpicture',
+          () => {}
+        );
+      }
+    };
+  }, [onClosePictureInPicture, onCloseFullScreen]);
+
+  useEffect(() => {
+    if (playerRef.current) {
+      playerRef.current.addEventListener('play', () => {
+        onPlay();
+      });
+      playerRef.current.addEventListener('pause', () => {
+        onPause();
+      });
+    }
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.removeEventListener('play', () => {});
+        playerRef.current.removeEventListener('pause', () => {});
+      }
+    };
+  }, [onPlay, onPause]);
+
+  useEffect(() => {
+    if (isPictureInPicture) {
+      if (playerRef.current) {
+        playerRef.current
+          ?.requestPictureInPicture()
+          .catch((error: Error) => console.log(error.message));
+      }
+    } else {
+      const isOpenPictureInPicture = document?.pictureInPictureElement;
+      if (isOpenPictureInPicture) {
+        document
+          .exitPictureInPicture()
+          .catch((error) => console.log(error.message));
+      }
+    }
+  }, [isPictureInPicture]);
 
   useEffect(() => {
     const player = playerRef.current;
@@ -68,40 +153,50 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }, [playerRef]);
 
   useEffect(() => {
+    let timeout: any;
     if (isPlaying) {
       setIsShowingControls(true);
-      const timeout = setTimeout(() => setIsShowingControls(false), 3000);
-      return () => {
-        clearTimeout(timeout);
-      };
+      timeout = setTimeout(() => setIsShowingControls(false), 3000);
     }
-    return () => {};
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
   }, [isPlaying, isVideoHover]);
 
-  const onPlayClicked = useCallback(() => {
-    onPlayingPlay();
-    playerRef.current?.play();
-    return true;
-  }, [onPlayingPlay]);
-
-  const onPauseClicked = useCallback(() => {
-    onPlayingPause();
-    playerRef.current?.pause();
-  }, [onPlayingPause]);
-
-  const onTogglePlayClicked = useCallback(() => {
-    if (isPlaying) {
-      return onPauseClicked();
+  useEffect(() => {
+    if (playerRef.current) {
+      playerRef.current.muted = isMuted;
     }
-    return onPlayClicked();
-  }, [onPauseClicked, onPlayClicked, isPlaying]);
+  }, [isMuted]);
+
+  useEffect(() => {
+    if (playerRef.current) {
+      playerRef.current.volume = volume;
+    }
+  }, [volume]);
+
+  useEffect(() => {
+    if (playerRef.current) {
+      if (isPlaying) {
+        playerRef.current?.play();
+      } else {
+        playerRef.current?.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  useEffect(() => {
+    playerRef.current.muted = isMuted;
+  }, [isMuted]);
 
   const onReloadClicked = useCallback(() => {
     if (playerRef.current?.currentTime) {
       playerRef.current.currentTime = 0;
     }
-    onPlayClicked();
-  }, [onPlayClicked]);
+    onPlay();
+  }, [onPlay]);
 
   const onChangeCurrentTime = useCallback((e: any) => {
     setCurrentTime(e.target?.currentTime);
@@ -109,26 +204,14 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const onChangeCurrentTimeToProgress = useCallback(
     (time: number) => {
-      onPauseClicked();
+      onPause();
       setCurrentTime(time);
       if (playerRef.current?.currentTime) {
         playerRef.current.currentTime = time;
       }
     },
-    [onPauseClicked]
+    [onPause]
   );
-
-  const onChangePlayerVolume = useCallback(
-    (e: any) => {
-      onChangeVolume(e.target?.volume);
-    },
-    [onChangeVolume]
-  );
-
-  const onTogglePlayerMute = useCallback(() => {
-    onToggleMute();
-    playerRef.current.muted = !playerRef.current.muted;
-  }, [onToggleMute]);
 
   const videoDuration = useMemo(() => {
     if (duration) {
@@ -137,21 +220,40 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return 0;
   }, [duration]);
 
+  const fullScreenStyle: any = useMemo(() => {
+    if (isFullScreen) {
+      return {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        position: 'fixed',
+        width: 'full',
+        height: 'full',
+        borderRadius: 'none'
+      };
+    }
+  }, [isFullScreen]);
+
   return (
     <VideoPlayerProvider
       poster={poster}
-      isPlaying={isPlaying}
       duration={videoDuration}
       currentTime={currentTime}
-      onPlay={onPlayClicked}
-      onPause={onPauseClicked}
-      onReload={onReloadClicked}
-      onTogglePlaying={onTogglePlayClicked}
-      onChangeCurrentTime={onChangeCurrentTimeToProgress}
       volume={volume}
       isMuted={isMuted}
-      onToggleMute={onTogglePlayerMute}
-      onChangeVolume={onChangePlayerVolume}
+      isPlaying={isPlaying}
+      isFullScreen={isFullScreen}
+      isPictureInPicture={isPictureInPicture}
+      onPlay={onPlay}
+      onPause={onPause}
+      onReload={onReloadClicked}
+      onTogglePlaying={onTogglePlaying}
+      onChangeCurrentTime={onChangeCurrentTimeToProgress}
+      onToggleMute={onToggleMute}
+      onChangeVolume={onChangeVolume}
+      onToggleFullScreen={onToggleFullScreen}
+      onTogglePictureInPicture={onTogglePictureInPicture}
     >
       <Box
         width="full"
@@ -160,20 +262,24 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         onMouseEnter={isPlaying ? () => setIsVideoHover(true) : undefined}
         onMouseLeave={isPlaying ? () => setIsVideoHover(false) : undefined}
         {...props}
+        {...fullScreenStyle}
+        id={videoContainerID}
       >
         <AspectRatio ratio={16 / 9}>
           <Box width="full" flex="1">
             <Video
               id={id}
               ref={playerRef}
-              onTimeUpdate={onChangeCurrentTime}
+              controlsList="nodownload"
               poster={poster}
               src={src}
               border={0}
               backgroundColor="black.900"
               borderRadius="lg"
               overflow="hidden"
-              onClick={onTogglePlayClicked}
+              onClick={onTogglePlaying}
+              onTimeUpdate={onChangeCurrentTime}
+              onContextMenu={(event) => event.preventDefault()}
             />
             {isFirstPlay ? (
               <Box width="full" position="absolute" bottom={0} left={0}>

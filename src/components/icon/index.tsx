@@ -49,6 +49,10 @@ export const icons = {
   stop: IconComponent.StopIcon,
   muted: IconComponent.VolumeMutedIcon,
   unmuted: IconComponent.VolumeUnmutedIcon,
+  fullscreen: IconComponent.FullScreenIcon,
+  exitFullscreen: IconComponent.ExitFullScreenIcon,
+  pictureInPicture: IconComponent.PictureInPictureIcon,
+  exitPictureInPicture: IconComponent.ExitPictureInPictureIcon,
   reload: IconComponent.ReloadIcon
 };
 

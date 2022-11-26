@@ -5,8 +5,9 @@ export const useVideoPlaying = () => {
   const [isFirstPlay, setIsFirstPlay] = useState(false);
   const {
     isOpen: isPlaying,
-    onClose: onPlayingPause,
-    onOpen: onPlayingPlay
+    onClose: onPause,
+    onOpen: onPlay,
+    onToggle: onTogglePlaying
   } = useDisclosure();
 
   useEffect(() => {
@@ -18,7 +19,8 @@ export const useVideoPlaying = () => {
   return {
     isFirstPlay,
     isPlaying,
-    onPlayingPause,
-    onPlayingPlay
+    onPause,
+    onPlay,
+    onTogglePlaying
   };
 };
