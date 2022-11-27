@@ -69,6 +69,7 @@ export const useStorageUpload = ({
   const onAbortUpload = useCallback(() => {
     if (uploadClient) {
       uploadClient.abort();
+      setIsLoading(false);
     }
   }, [uploadClient]);
 

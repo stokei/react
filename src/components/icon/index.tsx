@@ -53,7 +53,10 @@ export const icons = {
   exitFullscreen: IconComponent.ExitFullScreenIcon,
   pictureInPicture: IconComponent.PictureInPictureIcon,
   exitPictureInPicture: IconComponent.ExitPictureInPictureIcon,
-  reload: IconComponent.ReloadIcon
+  reload: IconComponent.ReloadIcon,
+  error: IconComponent.ErrorIcon,
+  ok: IconComponent.OkIcon,
+  trash: IconComponent.TrashIcon
 };
 
 export type IconName = keyof typeof icons;

@@ -6,6 +6,7 @@ export * from './input-card-number';
 export * from './input-cpf';
 export * from './input-cnpj';
 export * from './input-email';
+export * from './input-file';
 export * from './input-money';
 export * from './input-number';
 export * from './input-password';

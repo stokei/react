@@ -1,0 +1,21 @@
+import { Meta, Story } from '@storybook/addon-docs';
+import { decorators } from '../../storybook/decorators';
+
+import { ImageUploader } from '.';
+
+<Meta
+  title="Components/ImageUploader"
+  component={ImageUploader}
+  decorators={decorators}
+  args={{
+    uploadURL: 'https://tusd.tusdemo.net/files/'
+  }}
+/>
+
+export const Template = (args) => (
+  <ImageUploader buttonText="Adicionar image" {...args} />
+);
+
+<Story name="Upload" args={null}>
+  {Template.bind({})}
+</Story>

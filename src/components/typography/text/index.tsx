@@ -6,5 +6,9 @@ import {
 export interface TextProps extends ChakraTextProps {}
 
 export const Text: React.FC<TextProps> = ({ children, ...props }) => {
-  return <ChakraText {...props}>{children}</ChakraText>;
+  return (
+    <ChakraText display="inline-flex" {...props}>
+      {children}
+    </ChakraText>
+  );
 };

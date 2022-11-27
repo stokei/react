@@ -1,0 +1,58 @@
+import { Meta, Story } from '@storybook/addon-docs';
+import { Stack } from '../../stack';
+import { Title } from '../../typography';
+import { decorators } from '../../../storybook/decorators';
+import { useUploadFiles } from '../../../hooks/use-upload-files';
+
+import { InputFile, InputFileList, InputFileListItem } from '.';
+
+<Meta
+  title="Components/Fields/InputFile"
+  component={InputFile}
+  decorators={decorators}
+/>
+
+export const Template = (args) => {
+  const { files, onAddFiles, onRemoveFile } = useUploadFiles();
+  return (
+    <>
+      <InputFile {...args} onChange={onAddFiles}>
+        Adicionar arquivo
+      </InputFile>
+      <InputFileList>
+        {files?.map((file, position) => {
+          const fileURL = URL.createObjectURL(file);
+          const randomPercentage = position * 5;
+          return (
+            <InputFileListItem
+              fileURL={fileURL}
+              filename={file.name}
+              size={file.size}
+              progress={randomPercentage}
+              onRemoveFile={() => onRemoveFile(position)}
+            />
+          );
+        })}
+      </InputFileList>
+    </>
+  );
+};
+
+<Story
+  name="Single"
+  args={{
+    label: 'Single'
+  }}
+>
+  {Template.bind({})}
+</Story>
+
+<Story
+  name="Multiple"
+  args={{
+    label: 'Multiple',
+    multiple: true
+  }}
+>
+  {Template.bind({})}
+</Story>

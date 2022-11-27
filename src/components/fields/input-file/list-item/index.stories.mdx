@@ -1,0 +1,55 @@
+import { Meta, Story } from '@storybook/addon-docs';
+import { Stack } from '../../../stack';
+import { Title } from '../../../typography';
+import { decorators } from '../../../../storybook/decorators';
+import { useUploadFiles } from '../../../../hooks/use-upload-files';
+
+import { InputFileListItem } from '.';
+
+<Meta
+  title="Components/Fields/InputFile/ListItem"
+  component={InputFileListItem}
+  decorators={decorators}
+/>
+
+export const Template = (args) => {
+  return (
+    <InputFileListItem
+      fileURL="https://google.com/my-file.png"
+      filename="my-file.png"
+      size={523333}
+      {...args}
+    />
+  );
+};
+
+<Story name="Initial state">{Template.bind({})}</Story>
+
+<Story
+  name="Upload progress"
+  args={{
+    progress: 58
+  }}
+>
+  {Template.bind({})}
+</Story>
+
+<Story
+  name="Error"
+  args={{
+    isFinished: true,
+    success: false
+  }}
+>
+  {Template.bind({})}
+</Story>
+
+<Story
+  name="Success"
+  args={{
+    isFinished: true,
+    success: true
+  }}
+>
+  {Template.bind({})}
+</Story>

@@ -1,54 +1,56 @@
-import { FaGraduationCap, FaMoneyBill } from 'react-icons/fa';
 import {
-  SolutionOutlined,
-  BankOutlined,
-  PhoneOutlined,
-  SmileOutlined,
-  UserOutlined,
-  EyeOutlined,
-  EyeInvisibleOutlined,
-  MailOutlined,
-  ArrowLeftOutlined,
+  AppstoreAddOutlined,
+  AppstoreOutlined,
   ArrowDownOutlined,
+  ArrowLeftOutlined,
   ArrowUpOutlined,
+  BankOutlined,
+  BarChartOutlined,
+  BellOutlined,
+  EnvironmentOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  FileDoneOutlined,
+  FileOutlined,
+  HomeOutlined,
+  InfoOutlined,
+  LoadingOutlined,
+  LogoutOutlined,
+  MailOutlined,
   MenuOutlined,
   MoreOutlined,
-  LogoutOutlined,
-  InfoOutlined,
-  FileOutlined,
-  VideoCameraOutlined,
-  HomeOutlined,
+  PhoneOutlined,
   PlusOutlined,
+  ReloadOutlined,
   SettingOutlined,
-  EnvironmentOutlined,
-  BarChartOutlined,
-  ShoppingCartOutlined,
   ShopOutlined,
-  AppstoreOutlined,
-  AppstoreAddOutlined,
-  WalletOutlined,
-  BellOutlined,
-  FileDoneOutlined,
-  LoadingOutlined,
-  ReloadOutlined
+  ShoppingCartOutlined,
+  SmileOutlined,
+  SolutionOutlined,
+  UserOutlined,
+  VideoCameraOutlined,
+  WalletOutlined
 } from '@ant-design/icons';
 import {
+  BsFullscreen,
+  BsFullscreenExit,
+  BsMoon,
+  BsPauseFill,
+  BsPlayFill,
   BsStar,
   BsStarFill,
   BsStarHalf,
-  BsMoon,
-  BsSun,
-  BsPlayFill,
-  BsPauseFill,
   BsStopFill,
+  BsSun,
+  BsTrash,
   BsVolumeMute,
-  BsVolumeUp,
-  BsFullscreen,
-  BsFullscreenExit,
-  BsPip
+  BsVolumeUp
 } from 'react-icons/bs';
+import { FaGraduationCap, FaMoneyBill } from 'react-icons/fa';
 
 import {
+  RiCheckboxCircleFill,
+  RiErrorWarningFill,
   RiPictureInPicture2Line,
   RiPictureInPictureExitLine
 } from 'react-icons/ri';
@@ -94,6 +96,9 @@ export const LightModeIcon = BsSun;
 export const PlayIcon = BsPlayFill;
 export const PauseIcon = BsPauseFill;
 export const StopIcon = BsStopFill;
+export const TrashIcon = BsTrash;
+export const OkIcon = RiCheckboxCircleFill;
+export const ErrorIcon = RiErrorWarningFill;
 export const ReloadIcon = ReloadOutlined;
 export const VolumeMutedIcon = BsVolumeMute;
 export const VolumeUnmutedIcon = BsVolumeUp;

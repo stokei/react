@@ -4,16 +4,13 @@ import { Input, InputProps } from '../input';
 
 export interface InputPasswordProps extends InputProps {}
 
-export const InputPassword: React.FC<InputPasswordProps> = ({
-  onChange,
-  ...props
-}) => {
+export const InputPassword: React.FC<InputPasswordProps> = ({ ...props }) => {
   const [isShow, setIsShow] = useState(false);
   const [showPasswordValue, setShowPasswordValue] = useState('');
 
   const onChange = (e: any) => {
-    if (onChange) {
-      onChange(e);
+    if (props.onChange) {
+      props.onChange(e);
     }
     setShowPasswordValue(e.target.value);
   };
