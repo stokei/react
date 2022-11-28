@@ -3,8 +3,6 @@ import {
   CircularProgressProps as ChakraCircularProgressProps
 } from '@chakra-ui/react';
 
-export * from './label';
-
 export interface CircularProgressProps extends ChakraCircularProgressProps {}
 
 export const CircularProgress: React.FC<CircularProgressProps> = ({

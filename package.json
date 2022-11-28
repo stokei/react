@@ -5,7 +5,7 @@
   "type": "module",
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "vite",
+    "dev": "tsc -w",
     "build": "rimraf dist && tsc && vite build",
     "lint": "eslint --ext .jsx,.js,.tsx,.ts",
     "lint:fix": "npm run lint -- --fix",
@@ -36,7 +36,6 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.8.0",
     "@chakra-ui/react": "^2.4.1",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",

@@ -18,6 +18,7 @@ import {
   useVideoVolume,
   useVideoFullScreen
 } from '../../hooks';
+import { Loading } from '../loading';
 
 export {
   Poster as VideoPlayerPoster,
@@ -42,7 +43,6 @@ export interface VideoPlayerProps extends BoxProps {
   readonly src: string;
   readonly videoId: string;
   readonly videoName: string;
-  readonly duration: number;
   readonly viewer?: VideoPlayerViewerData;
   readonly poster: string;
 }
@@ -52,12 +52,13 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   poster,
   videoId,
   videoName,
-  duration,
   ...props
 }) => {
   const playerRef = useRef<any>(null);
   const [currentTime, setCurrentTime] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
   const [isVideoHover, setIsVideoHover] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isShowingControls, setIsShowingControls] = useState<boolean>(false);
   const { isPlaying, onPause, onPlay, onTogglePlaying, isFirstPlay } =
     useVideoPlaying();
@@ -108,23 +109,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
     };
   }, [onClosePictureInPicture, onCloseFullScreen]);
-
-  useEffect(() => {
-    if (playerRef.current) {
-      playerRef.current.addEventListener('play', () => {
-        onPlay();
-      });
-      playerRef.current.addEventListener('pause', () => {
-        onPause();
-      });
-    }
-    return () => {
-      if (playerRef.current) {
-        playerRef.current.removeEventListener('play', () => {});
-        playerRef.current.removeEventListener('pause', () => {});
-      }
-    };
-  }, [onPlay, onPause]);
 
   useEffect(() => {
     if (isPictureInPicture) {
@@ -192,7 +176,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }, [isMuted]);
 
   const onReloadClicked = useCallback(() => {
-    if (playerRef.current?.currentTime) {
+    if (playerRef.current) {
       playerRef.current.currentTime = 0;
     }
     onPlay();
@@ -206,7 +190,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     (time: number) => {
       onPause();
       setCurrentTime(time);
-      if (playerRef.current?.currentTime) {
+      if (playerRef.current) {
         playerRef.current.currentTime = time;
       }
     },
@@ -214,7 +198,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   );
 
   const videoDuration = useMemo(() => {
-    if (duration) {
+    if (duration > 0) {
       return duration;
     }
     return 0;
@@ -243,6 +227,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       volume={volume}
       isMuted={isMuted}
       isPlaying={isPlaying}
+      isLoading={isLoading}
       isFullScreen={isFullScreen}
       isPictureInPicture={isPictureInPicture}
       onPlay={onPlay}
@@ -275,10 +260,17 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
               src={src}
               border={0}
               backgroundColor="black.900"
-              borderRadius="lg"
+              rounded="md"
               overflow="hidden"
               onClick={onTogglePlaying}
+              onPlay={onPlay}
+              onPause={onPause}
+              onDurationChange={(e) =>
+                setDuration((e.target as any).duration ?? 0)
+              }
               onTimeUpdate={onChangeCurrentTime}
+              onLoadStart={() => setIsLoading(true)}
+              onCanPlay={() => setIsLoading(false)}
               onContextMenu={(event) => event.preventDefault()}
             />
             {isFirstPlay ? (
@@ -296,6 +288,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                 height="full"
                 flexDir="column"
                 justifyContent="flex-end"
+                onContextMenu={(event) => event.preventDefault()}
               >
                 <Poster src={poster} duration={videoDuration} />
                 <Box
@@ -309,7 +302,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                   justifyContent="center"
                   alignItems="center"
                 >
-                  <BigPlayButton justifyContent="center" />
+                  {isLoading ? (
+                    <Loading size="lg" />
+                  ) : (
+                    <BigPlayButton justifyContent="center" />
+                  )}
                 </Box>
               </Box>
             )}

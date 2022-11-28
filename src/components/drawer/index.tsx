@@ -6,10 +6,6 @@ import {
   DrawerProps as ChakraDrawerProps
 } from '@chakra-ui/react';
 
-export * from './header';
-export * from './body';
-export * from './footer';
-
 export interface DrawerProps extends ChakraDrawerProps {}
 export const Drawer: React.FC<DrawerProps> = ({ children, ...props }) => (
   <ChakraDrawer {...props}>

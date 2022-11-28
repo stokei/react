@@ -6,10 +6,6 @@ import {
   AlertDialogProps as ChakraAlertDialogProps
 } from '@chakra-ui/react';
 
-export * from './header';
-export * from './body';
-export * from './footer';
-
 export interface AlertDialogProps extends ChakraAlertDialogProps {}
 export const AlertDialog: React.FC<AlertDialogProps> = ({
   children,

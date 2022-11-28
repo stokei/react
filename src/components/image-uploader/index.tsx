@@ -1,11 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useStorageUpload, useUploadFiles } from '../../hooks';
-import { InputFile, InputFileList, InputFileListItem } from '../fields';
+import { InputFile } from '../input-file';
+import { InputFileList } from '../input-file-list';
+import { InputFileListItem } from '../input-file-list-item';
 import { Stack, StackProps } from '../stack';
 
 export interface ImageUploaderProps extends Omit<StackProps, 'onError'> {
   readonly id: string;
-  readonly buttonText: string;
   readonly label?: string;
   readonly labelDescription?: string;
   readonly uploadURL: string;
@@ -19,7 +20,7 @@ export interface ImageUploaderProps extends Omit<StackProps, 'onError'> {
 }
 
 export const ImageUploader: React.FC<ImageUploaderProps> = ({
-  buttonText,
+  children,
   uploadURL,
   label,
   labelDescription,
@@ -73,16 +74,13 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   return (
     <Stack width="full" spacing="4" direction="column" {...props}>
       {!isLoading && !isCompleted ? (
-        <Stack width="full" spacing="4" direction="column">
-          <InputFile
-            id={'file-input-' + props.id}
-            label={label}
-            labelDescription={labelDescription}
-            onChange={(files) => onChangeFile(files[0])}
-          >
-            {buttonText}
-          </InputFile>
-        </Stack>
+        <InputFile
+          id={'file-input-' + props.id}
+          accept="image/*"
+          onChange={(files) => onChangeFile(files[0])}
+        >
+          {children}
+        </InputFile>
       ) : (
         <InputFileList>
           <InputFileListItem

@@ -1,13 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useStorageUpload, useUploadFiles } from '../../hooks';
-import { InputFile, InputFileList, InputFileListItem } from '../fields';
+import { InputFile } from '../input-file';
+import { InputFileList } from '../input-file-list';
+import { InputFileListItem } from '../input-file-list-item';
 import { Stack, StackProps } from '../stack';
 
 export interface VideoUploaderProps extends Omit<StackProps, 'onError'> {
   readonly id: string;
-  readonly label?: string;
-  readonly labelDescription?: string;
-  readonly buttonText: string;
   readonly uploadURL: string;
   readonly onSuccess: (
     file?: File | Blob | Pick<ReadableStreamDefaultReader, 'read'>
@@ -19,10 +18,8 @@ export interface VideoUploaderProps extends Omit<StackProps, 'onError'> {
 }
 
 export const VideoUploader: React.FC<VideoUploaderProps> = ({
-  buttonText,
+  children,
   uploadURL,
-  label,
-  labelDescription,
   onError,
   onSuccess,
   ...props
@@ -73,16 +70,13 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
   return (
     <Stack width="full" spacing="4" direction="column" {...props}>
       {!isLoading && !isCompleted ? (
-        <Stack width="full" spacing="4" direction="column">
-          <InputFile
-            id={'file-input-' + props.id}
-            label={label}
-            labelDescription={labelDescription}
-            onChange={(files) => onChangeFile(files[0])}
-          >
-            {buttonText}
-          </InputFile>
-        </Stack>
+        <InputFile
+          id={'file-input-' + props.id}
+          onChange={(files) => onChangeFile(files[0])}
+          accept="video/*"
+        >
+          {children}
+        </InputFile>
       ) : (
         <InputFileList>
           <InputFileListItem

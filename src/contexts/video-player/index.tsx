@@ -4,6 +4,7 @@ export { ColorModeScript } from '@chakra-ui/react';
 
 export interface VideoPlayerContextValues {
   readonly isPlaying: boolean;
+  readonly isLoading: boolean;
   readonly isFinished: boolean;
   readonly isFullScreen: boolean;
   readonly isPictureInPicture: boolean;
@@ -28,6 +29,7 @@ export interface VideoPlayerContextProps {
   readonly currentTime: number;
   readonly duration: number;
   readonly poster: string;
+  readonly isLoading: boolean;
   readonly isPlaying: boolean;
   readonly isMuted: boolean;
   readonly isFullScreen: boolean;
@@ -55,6 +57,7 @@ export const VideoPlayerProvider: React.FC<
   isFullScreen,
   isPictureInPicture,
   isPlaying,
+  isLoading,
   isMuted,
   volume,
   currentTime,
@@ -73,6 +76,7 @@ export const VideoPlayerProvider: React.FC<
   const configValues: VideoPlayerContextValues = useMemo(
     () => ({
       isPlaying,
+      isLoading,
       isFullScreen,
       isPictureInPicture,
       isFinished: currentTime >= duration,
@@ -97,6 +101,7 @@ export const VideoPlayerProvider: React.FC<
       duration,
       isMuted,
       isPlaying,
+      isLoading,
       isFullScreen,
       isPictureInPicture,
       onChangeCurrentTime,

@@ -11,8 +11,6 @@ export default {
 export const Player: StoryObj<VideoPlayerProps> = {
   args: {
     id: 'stokei-player',
-    src: 'https://vjs.zencdn.net/v/oceans.mp4',
-    width: 'md',
-    duration: 46.6
+    width: 'md'
   }
 };

@@ -13,7 +13,9 @@ import { VideoUploader } from '.';
 />
 
 export const Template = (args) => (
-  <VideoUploader buttonText="Adicionar video" {...args} />
+  <VideoUploader {...args}>
+    <Text>Clique aqui para adicionar o seu video</Text>
+  </VideoUploader>
 );
 
 <Story name="Upload" args={null}>

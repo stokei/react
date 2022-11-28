@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text } from '../typography';
+import { Text } from '../text';
 import { IColor, IColorName, IColorHue } from '../../interfaces';
 import { BoxProps, Box } from '../box';
-import { Label } from '../typography/label';
+import { Label } from '../label';
 
 export type PaletteSize = 'xs' | 'sm' | 'md' | 'lg';
 

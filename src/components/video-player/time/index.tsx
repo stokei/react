@@ -1,4 +1,4 @@
-import { Text, TextProps } from '../../typography';
+import { Text, TextProps } from '../../text';
 
 export interface TimeProps extends TextProps {}
 export const Time: React.FC<TimeProps> = ({ children, ...props }) => (

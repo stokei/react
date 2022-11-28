@@ -1,39 +1,33 @@
 import {
-  AppstoreAddOutlined,
-  AppstoreOutlined,
-  ArrowDownOutlined,
-  ArrowLeftOutlined,
-  ArrowUpOutlined,
-  BankOutlined,
-  BarChartOutlined,
-  BellOutlined,
-  EnvironmentOutlined,
-  EyeInvisibleOutlined,
-  EyeOutlined,
-  FileDoneOutlined,
-  FileOutlined,
-  HomeOutlined,
-  InfoOutlined,
-  LoadingOutlined,
-  LogoutOutlined,
-  MailOutlined,
-  MenuOutlined,
-  MoreOutlined,
-  PhoneOutlined,
-  PlusOutlined,
-  ReloadOutlined,
-  SettingOutlined,
-  ShopOutlined,
-  ShoppingCartOutlined,
-  SmileOutlined,
-  SolutionOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  WalletOutlined
-} from '@ant-design/icons';
+  AiOutlineArrowDown,
+  AiOutlineArrowLeft,
+  AiOutlineArrowRight,
+  AiOutlineArrowUp,
+  AiOutlineBank,
+  AiOutlineEnvironment,
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+  AiOutlineHome,
+  AiOutlineInfo,
+  AiOutlineInfoCircle,
+  AiOutlineLoading,
+  AiOutlineLogout,
+  AiOutlineMail,
+  AiOutlineMenu,
+  AiOutlineMore,
+  AiOutlinePhone,
+  AiOutlineReload,
+  AiOutlineSmile,
+  AiOutlineUser,
+  AiOutlineVideoCamera
+} from 'react-icons/ai';
+import { BiLineChart } from 'react-icons/bi';
 import {
+  BsBell,
+  BsCart,
   BsFullscreen,
   BsFullscreenExit,
+  BsListUl,
   BsMoon,
   BsPauseFill,
   BsPlayFill,
@@ -44,9 +38,17 @@ import {
   BsSun,
   BsTrash,
   BsVolumeMute,
-  BsVolumeUp
+  BsVolumeUp,
+  BsWallet2
 } from 'react-icons/bs';
-import { FaGraduationCap, FaMoneyBill } from 'react-icons/fa';
+import {
+  FaFileContract,
+  FaGraduationCap,
+  FaMoneyBill,
+  FaStore
+} from 'react-icons/fa';
+import { FiPlus, FiSettings } from 'react-icons/fi';
+import { TbApps } from 'react-icons/tb';
 
 import {
   RiCheckboxCircleFill,
@@ -55,39 +57,39 @@ import {
   RiPictureInPictureExitLine
 } from 'react-icons/ri';
 
-export const PasswordShowIcon = EyeOutlined;
-export const PasswordHideIcon = EyeInvisibleOutlined;
-export const InfoIcon = SolutionOutlined;
-export const ContactIcon = PhoneOutlined;
-export const BankAccountIcon = BankOutlined;
-export const EmailIcon = MailOutlined;
-export const SmileIcon = SmileOutlined;
-export const UserIcon = UserOutlined;
-export const BackIcon = ArrowLeftOutlined;
-export const MenuIcon = MenuOutlined;
-export const AddressIcon = EnvironmentOutlined;
-export const MenuEllipsisIcon = MoreOutlined;
-export const LogoutIcon = LogoutOutlined;
-export const ArrowDownIcon = ArrowDownOutlined;
-export const ArrowUpIcon = ArrowUpOutlined;
-export const AboutIcon = InfoOutlined;
-export const MaterialIcon = FileOutlined;
-export const VideoIcon = VideoCameraOutlined;
-export const HomeIcon = HomeOutlined;
-export const PlusIcon = PlusOutlined;
-export const SettingIcon = SettingOutlined;
+export const PasswordShowIcon = AiOutlineEye;
+export const PasswordHideIcon = AiOutlineEyeInvisible;
+export const InfoIcon = AiOutlineInfo;
+export const ContactIcon = AiOutlinePhone;
+export const BankAccountIcon = AiOutlineBank;
+export const EmailIcon = AiOutlineMail;
+export const SmileIcon = AiOutlineSmile;
+export const UserIcon = AiOutlineUser;
+export const BackIcon = AiOutlineArrowLeft;
+export const MenuIcon = AiOutlineMenu;
+export const AddressIcon = AiOutlineEnvironment;
+export const MenuEllipsisIcon = AiOutlineMore;
+export const LogoutIcon = AiOutlineLogout;
+export const ArrowRightIcon = AiOutlineArrowRight;
+export const ArrowLeftIcon = AiOutlineArrowLeft;
+export const ArrowDownIcon = AiOutlineArrowDown;
+export const ArrowUpIcon = AiOutlineArrowUp;
+export const AboutIcon = AiOutlineInfoCircle;
+export const VideoIcon = AiOutlineVideoCamera;
+export const HomeIcon = AiOutlineHome;
+export const PlusIcon = FiPlus;
+export const SettingIcon = FiSettings;
 export const PlanIcon = FaMoneyBill;
-export const DashboardIcon = BarChartOutlined;
-export const OrderIcon = ShoppingCartOutlined;
-export const CartIcon = ShoppingCartOutlined;
-export const StoreIcon = ShopOutlined;
-export const SubscriptionIcon = FileDoneOutlined;
-export const ProjectIcon = AppstoreOutlined;
-export const NewProjectIcon = AppstoreAddOutlined;
+export const DashboardIcon = BiLineChart;
+export const OrderIcon = BsListUl;
+export const CartIcon = BsCart;
+export const StoreIcon = FaStore;
+export const SubscriptionIcon = FaFileContract;
+export const AppIcon = TbApps;
 export const CourseIcon = FaGraduationCap;
-export const NotificationIcon = BellOutlined;
-export const WalletIcon = WalletOutlined;
-export const LoadingIcon = LoadingOutlined;
+export const NotificationIcon = BsBell;
+export const WalletIcon = BsWallet2;
+export const LoadingIcon = AiOutlineLoading;
 export const StarFillIcon = BsStarFill;
 export const StarHalfIcon = BsStarHalf;
 export const StarIcon = BsStar;
@@ -99,7 +101,7 @@ export const StopIcon = BsStopFill;
 export const TrashIcon = BsTrash;
 export const OkIcon = RiCheckboxCircleFill;
 export const ErrorIcon = RiErrorWarningFill;
-export const ReloadIcon = ReloadOutlined;
+export const ReloadIcon = AiOutlineReload;
 export const VolumeMutedIcon = BsVolumeMute;
 export const VolumeUnmutedIcon = BsVolumeUp;
 export const FullScreenIcon = BsFullscreen;

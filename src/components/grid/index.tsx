@@ -1,11 +1,11 @@
 import {
-  SimpleGrid as ChakraSimpleGrid,
-  SimpleGridProps as ChakraSimpleGridProps
+  Grid as ChakraGrid,
+  GridProps as ChakraGridProps
 } from '@chakra-ui/react';
 
-export interface GridProps extends ChakraSimpleGridProps {}
+export interface GridProps extends ChakraGridProps {}
 export const Grid: React.FC<GridProps> = ({ children, ...props }) => (
-  <ChakraSimpleGrid width="full" {...props}>
+  <ChakraGrid width="full" {...props}>
     {children}
-  </ChakraSimpleGrid>
+  </ChakraGrid>
 );
