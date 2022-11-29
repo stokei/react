@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState
 } from 'react';
+import Hls from 'hls.js';
 import { AspectRatio } from '../aspect-ratio';
 import { Box, BoxProps } from '../box';
 import { BigPlayButton } from './big-play-button';
@@ -128,13 +129,23 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }, [isPictureInPicture]);
 
   useEffect(() => {
-    const player = playerRef.current;
+    if (playerRef.current) {
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(src);
+        hls.attachMedia(playerRef.current);
+      } else if (
+        playerRef.current.canPlayType('application/vnd.apple.mpegurl')
+      ) {
+        playerRef.current.src = src;
+      }
+    }
     return () => {
-      if (player) {
+      if (playerRef.current) {
         playerRef.current = undefined;
       }
     };
-  }, [playerRef]);
+  }, [src]);
 
   useEffect(() => {
     let timeout: any;

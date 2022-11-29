@@ -21,10 +21,10 @@ export const Controls: React.FC<ControlsProps> = () => {
       paddingX="4"
       direction="column"
     >
-      <Box flex="1">
+      <Box width="full">
         <Progress />
       </Box>
-      <Stack spacing="4" direction="row" alignItems="center">
+      <Stack spacing="4" direction="row" alignItems="center" rounded="md">
         <Stack spacing="2" direction="row" alignItems="center">
           <PlayButton />
           <VolumeButton />
