@@ -3,8 +3,10 @@ import { Icon } from '../../icon';
 import { Button } from '../../button';
 import { useVideoPlayer } from '../../../hooks/use-video-player';
 
-export interface BigPlayButtonProps extends BoxProps {}
-export const BigPlayButton: React.FC<BigPlayButtonProps> = ({ ...props }) => {
+export interface VideoPlayerBigPlayButtonProps extends BoxProps {}
+export const VideoPlayerBigPlayButton: React.FC<
+  VideoPlayerBigPlayButtonProps
+> = ({ ...props }) => {
   const { onPlay } = useVideoPlayer();
 
   return (

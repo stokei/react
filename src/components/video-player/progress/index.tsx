@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { secondsToTime } from '../../../utils/seconds-to-time';
 import { Box, BoxProps } from '../../box';
-import {
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack
-} from '../../slider';
+import { Slider } from '../../slider';
+import { SliderFilledTrack } from '../../slider-filled-track';
+import { SliderThumb } from '../../slider-thumb';
+import { SliderTrack } from '../../slider-track';
 import { Tooltip } from '../../tooltip';
 import { useVideoPlayer } from '../../../hooks/use-video-player';
 
-export interface ProgressProps extends BoxProps {}
-export const Progress: React.FC<ProgressProps> = () => {
+export interface VideoPlayerProgressProps extends BoxProps {}
+export const VideoPlayerProgress: React.FC<VideoPlayerProgressProps> = () => {
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const { currentTime, duration, onChangeCurrentTime } = useVideoPlayer();
 

@@ -6,10 +6,6 @@ import {
   ModalProps as ChakraModalProps
 } from '@chakra-ui/react';
 
-export * from './header';
-export * from './body';
-export * from './footer';
-
 export interface ModalProps extends ChakraModalProps {}
 export const Modal: React.FC<ModalProps> = ({ children, ...props }) => (
   <ChakraModal scrollBehavior="inside" size="lg" {...props}>

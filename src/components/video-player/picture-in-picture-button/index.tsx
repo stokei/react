@@ -2,10 +2,10 @@ import { Box, BoxProps } from '../../box';
 import { IconButton } from '../../icon-button';
 import { useVideoPlayer } from '../../../hooks/use-video-player';
 
-export interface PictureInPictureButtonProps extends BoxProps {}
-export const PictureInPictureButton: React.FC<PictureInPictureButtonProps> = ({
-  ...props
-}) => {
+export interface VideoPlayerPictureInPictureButtonProps extends BoxProps {}
+export const VideoPlayerPictureInPictureButton: React.FC<
+  VideoPlayerPictureInPictureButtonProps
+> = ({ ...props }) => {
   const { isPictureInPicture, onTogglePictureInPicture } = useVideoPlayer();
 
   return (

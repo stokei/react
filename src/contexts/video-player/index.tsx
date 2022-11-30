@@ -1,4 +1,5 @@
 import React, { PropsWithChildren, useMemo } from 'react';
+import { VideoPlayerSpeed } from '../../hooks';
 
 export { ColorModeScript } from '@chakra-ui/react';
 
@@ -14,6 +15,8 @@ export interface VideoPlayerContextValues {
   readonly poster: string;
   readonly initialTime: number;
   readonly currentTime: number;
+  readonly speed: VideoPlayerSpeed;
+  readonly onChangeSpeed: (speed: VideoPlayerSpeed) => void;
   readonly onChangeCurrentTime: (time: number) => void;
   readonly onPlay: () => void;
   readonly onPause: () => void;
@@ -29,6 +32,8 @@ export interface VideoPlayerContextProps {
   readonly currentTime: number;
   readonly duration: number;
   readonly poster: string;
+  readonly speed: VideoPlayerSpeed;
+  readonly onChangeSpeed: (speed: VideoPlayerSpeed) => void;
   readonly isLoading: boolean;
   readonly isPlaying: boolean;
   readonly isMuted: boolean;
@@ -63,6 +68,8 @@ export const VideoPlayerProvider: React.FC<
   currentTime,
   duration,
   poster,
+  speed,
+  onChangeSpeed,
   onPause,
   onPlay,
   onReload,
@@ -86,6 +93,8 @@ export const VideoPlayerProvider: React.FC<
       duration,
       initialTime: 0,
       currentTime,
+      speed,
+      onChangeSpeed,
       onPause,
       onPlay,
       onReload,
@@ -104,6 +113,8 @@ export const VideoPlayerProvider: React.FC<
       isLoading,
       isFullScreen,
       isPictureInPicture,
+      speed,
+      onChangeSpeed,
       onChangeCurrentTime,
       onChangeVolume,
       onPause,

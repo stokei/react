@@ -8,4 +8,5 @@ export * from './use-video-fullscreen';
 export * from './use-video-picture-in-picture';
 export * from './use-video-player';
 export * from './use-video-playing';
+export * from './use-video-speed';
 export * from './use-video-volume';

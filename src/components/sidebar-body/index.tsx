@@ -1,4 +1,4 @@
-import { Stack, StackProps } from '../../stack';
+import { Stack, StackProps } from '../stack';
 
 export interface SidebarBodyProps extends StackProps {}
 

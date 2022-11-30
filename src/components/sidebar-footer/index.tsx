@@ -1,4 +1,4 @@
-import { Box, BoxProps } from '../../box';
+import { Box, BoxProps } from '../box';
 
 export interface SidebarFooterProps extends BoxProps {}
 

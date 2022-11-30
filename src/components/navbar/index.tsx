@@ -1,7 +1,5 @@
 import { Container, ContainerProps } from '../container';
 
-export * from './nav-link';
-
 export interface NavbarProps extends ContainerProps {}
 export const Navbar: React.FC<NavbarProps> = ({ children, ...props }) => (
   <Container

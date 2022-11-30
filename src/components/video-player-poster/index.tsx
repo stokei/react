@@ -1,13 +1,17 @@
-import { secondsToTime } from '../../../utils/seconds-to-time';
-import { Box, BoxProps } from '../../box';
-import { Image } from '../../image';
-import { Time } from '../time';
+import { secondsToTime } from '../../utils/seconds-to-time';
+import { Box, BoxProps } from '../box';
+import { Image } from '../image';
+import { VideoPlayerTime } from '../video-player/time';
 
-export interface PosterProps extends BoxProps {
+export interface VideoPlayerPosterProps extends BoxProps {
   readonly src: string;
   readonly duration: number;
 }
-export const Poster: React.FC<PosterProps> = ({ src, duration, ...props }) => (
+export const VideoPlayerPoster: React.FC<VideoPlayerPosterProps> = ({
+  src,
+  duration,
+  ...props
+}) => (
   <Box flex="1" position="relative" {...props}>
     {src ? <Image width="full" alt="VideoPoster" src={src} /> : undefined}
 
@@ -28,7 +32,7 @@ export const Poster: React.FC<PosterProps> = ({ src, duration, ...props }) => (
         alignItems="center"
         justifyContent="center"
       >
-        <Time>{secondsToTime(duration)}</Time>
+        <VideoPlayerTime>{secondsToTime(duration)}</VideoPlayerTime>
       </Box>
     </Box>
   </Box>

@@ -1,7 +1,10 @@
 import { Text, TextProps } from '../../text';
 
-export interface TimeProps extends TextProps {}
-export const Time: React.FC<TimeProps> = ({ children, ...props }) => (
+export interface VideoPlayerTimeProps extends TextProps {}
+export const VideoPlayerTime: React.FC<VideoPlayerTimeProps> = ({
+  children,
+  ...props
+}) => (
   <Text
     color="white.500"
     textShadow="sm"

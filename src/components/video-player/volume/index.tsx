@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { secondsToTime } from '../../../utils/seconds-to-time';
 import { Box, BoxProps } from '../../box';
-import {
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack
-} from '../../slider';
+import { Slider } from '../../slider';
+import { SliderFilledTrack } from '../../slider-filled-track';
+import { SliderThumb } from '../../slider-thumb';
+import { SliderTrack } from '../../slider-track';
 import { Tooltip } from '../../tooltip';
 import { useVideoPlayer } from '../../../hooks/use-video-player';
 
-export interface VolumeProps extends BoxProps {}
-export const Volume: React.FC<VolumeProps> = () => {
+export interface VideoPlayerVolumeProps extends BoxProps {}
+export const VideoPlayerVolume: React.FC<VideoPlayerVolumeProps> = () => {
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const { currentTime, duration, onChangeCurrentTime } = useVideoPlayer();
 

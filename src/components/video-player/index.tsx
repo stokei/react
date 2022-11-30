@@ -9,22 +9,18 @@ import React, {
 import Hls from 'hls.js';
 import { AspectRatio } from '../aspect-ratio';
 import { Box, BoxProps } from '../box';
-import { BigPlayButton } from './big-play-button';
-import { Controls } from './controls';
-import { Poster } from './poster';
+import { VideoPlayerBigPlayButton } from './big-play-button';
+import { VideoPlayerControls } from './controls';
+import { VideoPlayerPoster } from '../video-player-poster';
 import { VideoPlayerProvider } from '../../contexts';
 import {
   useVideoPictureInPicture,
   useVideoPlaying,
   useVideoVolume,
-  useVideoFullScreen
+  useVideoFullScreen,
+  useVideoSpeed
 } from '../../hooks';
 import { Loading } from '../loading';
-
-export {
-  Poster as VideoPlayerPoster,
-  type PosterProps as VideoPlayerPosterProps
-} from './poster';
 
 type VideoProps = BoxProps &
   Omit<
@@ -64,6 +60,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const { isPlaying, onPause, onPlay, onTogglePlaying, isFirstPlay } =
     useVideoPlaying();
   const { volume, isMuted, onToggleMute, onChangeVolume } = useVideoVolume();
+  const { speed, onChangeSpeed } = useVideoSpeed();
   const { isFullScreen, onToggleFullScreen, onCloseFullScreen } =
     useVideoFullScreen();
   const {
@@ -183,8 +180,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }, [isPlaying]);
 
   useEffect(() => {
-    playerRef.current.muted = isMuted;
-  }, [isMuted]);
+    if (playerRef.current) {
+      playerRef.current.playbackRate = speed;
+    }
+  }, [speed]);
 
   const onReloadClicked = useCallback(() => {
     if (playerRef.current) {
@@ -236,6 +235,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       duration={videoDuration}
       currentTime={currentTime}
       volume={volume}
+      speed={speed}
+      onChangeSpeed={onChangeSpeed}
       isMuted={isMuted}
       isPlaying={isPlaying}
       isLoading={isLoading}
@@ -287,7 +288,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             {isFirstPlay ? (
               <Box width="full" position="absolute" bottom={0} left={0}>
                 {(!isPlaying || isVideoHover || isShowingControls) && (
-                  <Controls />
+                  <VideoPlayerControls />
                 )}
               </Box>
             ) : (
@@ -301,7 +302,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                 justifyContent="flex-end"
                 onContextMenu={(event) => event.preventDefault()}
               >
-                <Poster src={poster} duration={videoDuration} />
+                <VideoPlayerPoster src={poster} duration={videoDuration} />
                 <Box
                   width="full"
                   height="full"
@@ -316,7 +317,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                   {isLoading ? (
                     <Loading size="lg" />
                   ) : (
-                    <BigPlayButton justifyContent="center" />
+                    <VideoPlayerBigPlayButton justifyContent="center" />
                   )}
                 </Box>
               </Box>

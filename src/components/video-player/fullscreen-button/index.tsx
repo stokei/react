@@ -2,10 +2,10 @@ import { Box, BoxProps } from '../../box';
 import { IconButton } from '../../icon-button';
 import { useVideoPlayer } from '../../../hooks/use-video-player';
 
-export interface FullScreenButtonProps extends BoxProps {}
-export const FullScreenButton: React.FC<FullScreenButtonProps> = ({
-  ...props
-}) => {
+export interface VideoPlayerFullScreenButtonProps extends BoxProps {}
+export const VideoPlayerFullScreenButton: React.FC<
+  VideoPlayerFullScreenButtonProps
+> = ({ ...props }) => {
   const { isFullScreen, onToggleFullScreen } = useVideoPlayer();
 
   return (

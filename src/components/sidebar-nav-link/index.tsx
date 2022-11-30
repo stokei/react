@@ -1,20 +1,12 @@
-import { ReactNode } from 'react';
-import { Link, LinkProps } from '../../link';
-import { Box } from '../../box';
-import { Stack } from '../../stack';
-import { IconName, Icon } from '../../icon';
+import { Link, LinkProps } from '../link';
 
 export interface SidebarNavLinkProps extends LinkProps {
-  readonly icon: IconName;
-  readonly badge?: ReactNode;
   readonly isActive?: boolean;
 }
 
 export const SidebarNavLink: React.FC<SidebarNavLinkProps> = ({
   children,
-  badge,
   isActive,
-  icon,
   ...props
 }) => {
   const hoverStyle = {
@@ -48,15 +40,7 @@ export const SidebarNavLink: React.FC<SidebarNavLinkProps> = ({
       _active={activeStyle}
       {...activeStyle}
     >
-      <Stack alignItems="center" flex="1" direction="row" spacing="5">
-        {icon && (
-          <Box fontSize="lg">
-            <Icon name={icon} />
-          </Box>
-        )}
-        <Box>{children}</Box>
-      </Stack>
-      {badge}
+      {children}
     </Link>
   );
 };

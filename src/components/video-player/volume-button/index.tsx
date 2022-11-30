@@ -1,18 +1,17 @@
 import { useState } from 'react';
 
-import { Box } from '../../box';
-import { Stack, StackProps } from '../../stack';
-import { IconButton } from '../../icon-button';
 import { useVideoPlayer } from '../../../hooks/use-video-player';
-import {
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack
-} from '../../slider';
+import { IconButton } from '../../icon-button';
+import { Slider } from '../../slider';
+import { SliderFilledTrack } from '../../slider-filled-track';
+import { SliderThumb } from '../../slider-thumb';
+import { SliderTrack } from '../../slider-track';
+import { Stack, StackProps } from '../../stack';
 
-export interface VolumeButtonProps extends StackProps {}
-export const VolumeButton: React.FC<VolumeButtonProps> = ({ ...props }) => {
+export interface VideoPlayerVolumeButtonProps extends StackProps {}
+export const VideoPlayerVolumeButton: React.FC<
+  VideoPlayerVolumeButtonProps
+> = ({ ...props }) => {
   const [isVolumeHover, setIsVolumeHover] = useState<boolean>(false);
 
   const { isMuted, onToggleMute, volume, onChangeVolume } = useVideoPlayer();
