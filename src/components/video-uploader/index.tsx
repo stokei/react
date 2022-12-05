@@ -7,6 +7,8 @@ import { Stack, StackProps } from '../stack';
 
 export interface VideoUploaderProps extends Omit<StackProps, 'onError'> {
   readonly id: string;
+  readonly accountId: string;
+  readonly appId: string;
   readonly uploadURL: string;
   readonly onSuccess: (
     file?: File | Blob | Pick<ReadableStreamDefaultReader, 'read'>
@@ -20,6 +22,8 @@ export interface VideoUploaderProps extends Omit<StackProps, 'onError'> {
 export const VideoUploader: React.FC<VideoUploaderProps> = ({
   children,
   uploadURL,
+  accountId,
+  appId,
   onError,
   onSuccess,
   ...props
@@ -33,6 +37,8 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
   const { isStart, isLoading, isCompleted, onStartUpload, onAbortUpload } =
     useStorageUpload({
       uploadURL,
+      accountId,
+      appId,
       onError: (...args) => {
         setIsSuccessfullyUpload(false);
         onError?.(...args);
@@ -67,9 +73,11 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
     [files]
   );
 
+  const file = useMemo(() => files[0], [files]);
+
   return (
     <Stack width="full" spacing="4" direction="column" {...props}>
-      {!isLoading && !isCompleted ? (
+      {!file || (!isLoading && !isCompleted) ? (
         <InputFile
           id={'file-input-' + props.id}
           onChange={(files) => onChangeFile(files[0])}
@@ -81,8 +89,9 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
         <InputFileList>
           <InputFileListItem
             fileURL={fileURL}
-            filename={files?.[0]?.name}
-            size={files?.[0]?.size}
+            filename={file?.name}
+            size={file?.size}
+            isLoading={isLoading}
             progress={isStart ? progress : 0}
             success={isSuccessfullyUpload}
             isFinished={isCompleted}

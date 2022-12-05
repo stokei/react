@@ -3,6 +3,8 @@ import { Upload } from 'tus-js-client';
 
 export interface UseStorageUploadProps {
   readonly uploadURL: string;
+  readonly accountId: string;
+  readonly appId: string;
   readonly onSuccess: (
     file?: File | Blob | Pick<ReadableStreamDefaultReader, 'read'>
   ) => void;
@@ -16,13 +18,13 @@ export interface UseStorageUploadResponse {
   readonly isLoading: boolean;
   readonly isStart: boolean;
   readonly isCompleted: boolean;
-  readonly onStartUpload: (
-    file?: File | Blob | Pick<ReadableStreamDefaultReader, 'read'>
-  ) => void;
+  readonly onStartUpload: (file?: File) => void;
   readonly onAbortUpload: () => void;
 }
 
 export const useStorageUpload = ({
+  accountId,
+  appId,
   onError,
   onSuccess,
   onProgress,
@@ -34,7 +36,10 @@ export const useStorageUpload = ({
   const [isStart, setIsStart] = useState<boolean>(false);
 
   const onStartUpload = useCallback(
-    (file: any) => {
+    (file?: File) => {
+      if (!file) {
+        return;
+      }
       setIsLoading(true);
       setIsStart(true);
       const upload = new Upload(file, {
@@ -43,7 +48,10 @@ export const useStorageUpload = ({
         retryDelays: [0, 3000, 5000, 10000, 20000],
         metadata: {
           filename: file?.name,
-          filetype: file?.type
+          filetype: file?.type,
+          size: file?.size + '',
+          accountId,
+          appId
         },
         onProgress: (bytesUploaded, bytesTotal) => {
           const percentage = Math.round((bytesUploaded / bytesTotal) * 100);

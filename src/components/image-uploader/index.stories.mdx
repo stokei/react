@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/addon-docs';
+import { ArgsTable, Canvas, Meta, Story } from '@storybook/addon-docs';
 import { decorators } from '../../storybook/decorators';
 import { Text } from '../text';
 
@@ -9,7 +9,7 @@ import { ImageUploader } from '.';
   component={ImageUploader}
   decorators={decorators}
   args={{
-    uploadURL: 'https://tusd.tusdemo.net/files/'
+    uploadURL: 'http://localhost:4000/v1/uploads/file_clb5j3gag0000m2z05drfusau'
   }}
 />
 
@@ -19,6 +19,14 @@ export const Template = (args) => (
   </ImageUploader>
 );
 
-<Story name="Upload" args={null}>
-  {Template.bind({})}
-</Story>
+# ImageUploader
+
+<Canvas>
+  <Story name="Upload" args={null}>
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+# Props
+
+<ArgsTable of={ImageUploader} />

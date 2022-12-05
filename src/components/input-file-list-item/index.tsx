@@ -5,6 +5,7 @@ import { CircularProgress } from '../circular-progress';
 import { Icon } from '../icon';
 import { IconButton } from '../icon-button';
 import { Link } from '../link';
+import { Loading } from '../loading';
 import { Stack, StackProps } from '../stack';
 import { Text } from '../text';
 
@@ -14,6 +15,7 @@ export interface InputFileListItemProps extends StackProps {
   readonly size: number;
   readonly progress?: number;
   readonly success?: boolean;
+  readonly isLoading?: boolean;
   readonly isFinished?: boolean;
   readonly onRemoveFile: () => void;
 }
@@ -27,6 +29,7 @@ export const InputFileListItem: React.FC<InputFileListItemProps> = memo(
     size,
     progress,
     success,
+    isLoading,
     isFinished,
     ...props
   }) => (
@@ -50,10 +53,11 @@ export const InputFileListItem: React.FC<InputFileListItemProps> = memo(
           {formatBytes(size, 2)}
         </Text>
       </Stack>
+      {isLoading && !progress && <Loading size="sm" />}
       {!isFinished && progress && progress > 0 && (
         <CircularProgress size="20px" value={progress} />
       )}
-      {isFinished && (
+      {(success === true || success === false) && isFinished && (
         <Icon
           name={success ? 'ok' : 'error'}
           boxSize="5"

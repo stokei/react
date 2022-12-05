@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/addon-docs';
+import { ArgsTable, Canvas, Meta, Story } from '@storybook/addon-docs';
 import { Stack } from '../stack';
 import { Title } from '../title';
 import { decorators } from '../../storybook/decorators';
@@ -23,33 +23,53 @@ export const Template = (args) => {
   );
 };
 
-<Story name="Initial state">{Template.bind({})}</Story>
+# Initial state
 
-<Story
-  name="Upload progress"
-  args={{
-    progress: 58
-  }}
->
-  {Template.bind({})}
-</Story>
+<Canvas>
+  <Story name="Initial state">{Template.bind({})}</Story>
+</Canvas>
 
-<Story
-  name="Error"
-  args={{
-    isFinished: true,
-    success: false
-  }}
->
-  {Template.bind({})}
-</Story>
+# Upload progress
 
-<Story
-  name="Success"
-  args={{
-    isFinished: true,
-    success: true
-  }}
->
-  {Template.bind({})}
-</Story>
+<Canvas>
+  <Story
+    name="Upload progress"
+    args={{
+      progress: 58
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+# Error
+
+<Canvas>
+  <Story
+    name="Error"
+    args={{
+      isFinished: true,
+      success: false
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+# Success
+
+<Canvas>
+  <Story
+    name="Success"
+    args={{
+      isFinished: true,
+      success: true
+    }}
+  >
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+# Props
+
+<ArgsTable of={InputFileListItem} />

@@ -3,6 +3,7 @@ import {
   Button as ChakraButton,
   ButtonProps as ChakraButtonProps
 } from '@chakra-ui/react';
+import { IColor, IColorHue, IColorName } from '../../interfaces';
 
 export interface ButtonProps extends ChakraButtonProps {}
 export const Button: React.FC<ButtonProps> = ({ children, ...props }) => {
@@ -11,9 +12,19 @@ export const Button: React.FC<ButtonProps> = ({ children, ...props }) => {
       return props.textColor;
     }
     const [color, range] = (props.textColor as string)?.split('.') || [];
-    return color === 'white' || props.colorScheme === 'white'
-      ? `black.${range}`
-      : props.textColor;
+    const textColors: { [K in IColorName]?: string } = {
+      white: `black.${range}`,
+      cyan: `white.${range}`
+    };
+    const type = color || props.colorScheme;
+    switch (type) {
+      case 'white':
+        return textColors.white;
+      case 'cyan':
+        return textColors.cyan;
+      default:
+        return props.textColor;
+    }
   }, [props]);
   return (
     <ChakraButton

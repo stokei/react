@@ -4,6 +4,7 @@ import {
   generatePalette,
   generatePaletteToChakraUI
 } from '../../utils/color-palette';
+import { colors } from './colors';
 import { components } from './components';
 import { foundations } from './foundations';
 
@@ -23,7 +24,7 @@ const setThemeConfigColors = (colors?: StokeiThemeConfigColor) => ({
 });
 
 export const theme = (config?: StokeiThemeConfig) => {
-  const colors = setThemeConfigColors(config?.colors);
+  const themeColors = setThemeConfigColors(config?.colors);
   return extendTheme({
     ...components,
     ...foundations,
@@ -44,22 +45,7 @@ export const theme = (config?: StokeiThemeConfig) => {
     },
     colors: {
       ...colors,
-      ...generatePaletteToChakraUI('primary', '#24615e'),
-      ...generatePaletteToChakraUI('secondary', '#EE833C'),
-      ...generatePaletteToChakraUI('text', '#3c5251'),
-      ...generatePaletteToChakraUI('heading', '#0C2221'),
-      ...generatePaletteToChakraUI('background', '#8fa3a3'),
-      'background.50': '#fbfefe',
-      'background.100': '#f1f8f8',
-      'background.200': '#ddeeee',
-      ...generatePaletteToChakraUI('success', '#38a169'),
-      ...generatePaletteToChakraUI('error', '#e53e3e'),
-      ...generatePaletteToChakraUI('warning', '#d69e2e'),
-      ...generatePaletteToChakraUI('info', '#00b5d8'),
-      ...generatePaletteToChakraUI('disabled', '#9fa5a5'),
-      ...generatePaletteToChakraUI('black', '#0e2524'),
-      ...generatePaletteToChakraUI('white', '#fbfefe'),
-      ...colors
+      ...themeColors
     },
     fonts: {
       ...config?.fonts,

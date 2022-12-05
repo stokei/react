@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { MAX_IMAGE_SIZE } from '../../constants/file-sizes';
 import { useStorageUpload, useUploadFiles } from '../../hooks';
 import { InputFile } from '../input-file';
 import { InputFileList } from '../input-file-list';
@@ -7,8 +8,8 @@ import { Stack, StackProps } from '../stack';
 
 export interface ImageUploaderProps extends Omit<StackProps, 'onError'> {
   readonly id: string;
-  readonly label?: string;
-  readonly labelDescription?: string;
+  readonly accountId: string;
+  readonly appId: string;
   readonly uploadURL: string;
   readonly onSuccess: (
     file?: File | Blob | Pick<ReadableStreamDefaultReader, 'read'>
@@ -22,8 +23,8 @@ export interface ImageUploaderProps extends Omit<StackProps, 'onError'> {
 export const ImageUploader: React.FC<ImageUploaderProps> = ({
   children,
   uploadURL,
-  label,
-  labelDescription,
+  accountId,
+  appId,
   onError,
   onSuccess,
   ...props
@@ -37,6 +38,8 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   const { isStart, isLoading, isCompleted, onStartUpload, onAbortUpload } =
     useStorageUpload({
       uploadURL,
+      accountId,
+      appId,
       onError: (...args) => {
         setIsSuccessfullyUpload(false);
         onError?.(...args);
@@ -77,6 +80,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         <InputFile
           id={'file-input-' + props.id}
           accept="image/*"
+          maxSize={MAX_IMAGE_SIZE}
           onChange={(files) => onChangeFile(files[0])}
         >
           {children}

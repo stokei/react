@@ -50,7 +50,8 @@ const generateColor = (colorHexadecimal: string, index: number) => {
 
 export const generatePalette = (
   prefix: IColorName,
-  colorHexadecimal: string
+  colorHexadecimal: string,
+  overrideColors?: { [K in `${typeof prefix}.${IColorHue}`]?: string }
 ): { [K in `${typeof prefix}.${IColorHue}`]?: string } => ({
   [`${prefix}.50`]: generateColor(colorHexadecimal, 1),
   [`${prefix}.100`]: generateColor(colorHexadecimal, 2),
@@ -61,12 +62,14 @@ export const generatePalette = (
   [`${prefix}.600`]: generateColor(colorHexadecimal, 7),
   [`${prefix}.700`]: generateColor(colorHexadecimal, 8),
   [`${prefix}.800`]: generateColor(colorHexadecimal, 9),
-  [`${prefix}.900`]: generateColor(colorHexadecimal, 10)
+  [`${prefix}.900`]: generateColor(colorHexadecimal, 10),
+  ...overrideColors
 });
 
 export const generatePaletteToChakraUI = (
   prefix: IColorName,
-  colorHexadecimal: string
+  colorHexadecimal: string,
+  overrideColors?: { [K in IColorHue]?: string }
 ): { [key: string]: { [K in IColorHue]?: string } } => ({
   [prefix]: {
     50: generateColor(colorHexadecimal, 1),
@@ -78,6 +81,7 @@ export const generatePaletteToChakraUI = (
     600: generateColor(colorHexadecimal, 7),
     700: generateColor(colorHexadecimal, 8),
     800: generateColor(colorHexadecimal, 9),
-    900: generateColor(colorHexadecimal, 10)
+    900: generateColor(colorHexadecimal, 10),
+    ...overrideColors
   }
 });

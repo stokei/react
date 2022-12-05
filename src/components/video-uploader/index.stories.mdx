@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/addon-docs';
+import { ArgsTable, Canvas, Meta, Story } from '@storybook/addon-docs';
 import { decorators } from '../../storybook/decorators';
 
 import { VideoUploader } from '.';
@@ -8,7 +8,9 @@ import { VideoUploader } from '.';
   component={VideoUploader}
   decorators={decorators}
   args={{
-    uploadURL: 'https://tusd.tusdemo.net/files/'
+    accountId: 'acc_stokei',
+    appId: 'app_stokei',
+    uploadURL: 'http://localhost:4000/v1/uploads/file_clba3xtd50002m26k5pj5oeky'
   }}
 />
 
@@ -18,6 +20,14 @@ export const Template = (args) => (
   </VideoUploader>
 );
 
-<Story name="Upload" args={null}>
-  {Template.bind({})}
-</Story>
+# VideoUploader
+
+<Canvas>
+  <Story name="Upload" args={null}>
+    {Template.bind({})}
+  </Story>
+</Canvas>
+
+# Props
+
+<ArgsTable of={VideoUploader} />
