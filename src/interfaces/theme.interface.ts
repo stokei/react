@@ -13,8 +13,6 @@ export interface StokeiThemeConfigFont {
   readonly normal?: string;
 }
 
-console.log();
-
 export interface StokeiThemeConfig {
   readonly colors?: StokeiThemeConfigColor;
   readonly fonts?: StokeiThemeConfigFont;

@@ -16,6 +16,7 @@ export const Template = (args) => (
   <ColorPalette>
     {Object.entries(colors).map(([colorKey, colorValue]) => (
       <ColorItem
+        key={colorKey}
         title={colorKey}
         colors={Object.entries(colorValue).reduce(
           (prevHue, [currentHue, currentHex]) => ({

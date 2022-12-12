@@ -1,104 +1,104 @@
-import { useCallback, useMemo, useState } from 'react';
-import { useStorageUpload, useUploadFiles } from '../../hooks';
-import { InputFile } from '../input-file';
-import { InputFileList } from '../input-file-list';
-import { InputFileListItem } from '../input-file-list-item';
+import { useState, useEffect } from 'react';
+import Uppy from '@uppy/core';
+import { Dashboard, useUppy } from '@uppy/react';
+import Tus from '@uppy/tus';
+import { MAX_VIDEO_SIZE } from '../../constants/file-sizes';
+import { useStokeiTheme } from '../../hooks';
+import { Locale } from '../../interfaces';
 import { Stack, StackProps } from '../stack';
+
+export type LocaleVideoUploader = Locale<
+  | 'dropPasteFiles'
+  | 'note'
+  | 'save'
+  | 'cancel'
+  | 'pauseUpload'
+  | 'retryUpload'
+  | 'resumeUpload'
+  | 'uploadPaused'
+  | 'uploadComplete'
+  | 'myDevice'
+  | 'back'
+>;
 
 export interface VideoUploaderProps extends Omit<StackProps, 'onError'> {
   readonly id: string;
-  readonly accountId: string;
-  readonly appId: string;
   readonly uploadURL: string;
-  readonly onSuccess: (
-    file?: File | Blob | Pick<ReadableStreamDefaultReader, 'read'>
-  ) => void;
-  readonly onError: (
-    error: Error,
-    file?: File | Blob | Pick<ReadableStreamDefaultReader, 'read'>
-  ) => void;
+  readonly locale: LocaleVideoUploader;
+  readonly accept?: string[];
+  readonly onSuccess: (fileId: string) => void;
+  readonly onError: () => void;
 }
 
 export const VideoUploader: React.FC<VideoUploaderProps> = ({
-  children,
+  accept,
   uploadURL,
-  accountId,
-  appId,
-  onError,
+  locale,
   onSuccess,
+  onError,
   ...props
 }) => {
-  const [progress, setProgress] = useState<number>(0);
-  const [isSuccessfullyUpload, setIsSuccessfullyUpload] =
-    useState<boolean>(false);
+  const [fileId, setFileId] = useState('');
 
-  const { files, onAddFiles, onRemoveFile } = useUploadFiles();
+  const { appId, accountId, cloudflareAPIToken } = useStokeiTheme();
 
-  const { isStart, isLoading, isCompleted, onStartUpload, onAbortUpload } =
-    useStorageUpload({
-      uploadURL,
-      accountId,
-      appId,
-      onError: (...args) => {
-        setIsSuccessfullyUpload(false);
-        onError?.(...args);
+  const uppy = useUppy(() => {
+    return new Uppy({
+      allowMultipleUploadBatches: false,
+      autoProceed: true,
+      restrictions: {
+        allowedFileTypes: accept || ['video/*'],
+        maxFileSize: MAX_VIDEO_SIZE,
+        maxNumberOfFiles: 1,
+        minNumberOfFiles: 1
       },
-      onSuccess: (...args) => {
-        setIsSuccessfullyUpload(true);
-        onSuccess?.(...args);
+      meta: {
+        accountId,
+        appId
+      }
+    }).use(Tus, {
+      endpoint: uploadURL,
+      headers: {
+        Authorization: `Bearer ${cloudflareAPIToken}`
       },
-      onProgress: setProgress
+      onAfterResponse(req, res) {
+        const body = res.getBody();
+        const bodyFormated = body && JSON.parse(body);
+        if (bodyFormated?.file?.id) {
+          setFileId(bodyFormated?.file?.id);
+        }
+      }
     });
+  });
 
-  const onChangeFile = useCallback(
-    (file: File) => {
-      onAddFiles([file]);
-      onStartUpload(file);
-    },
-    [onStartUpload, onAddFiles]
-  );
+  useEffect(() => {
+    return () => uppy.close({ reason: 'unmount' });
+  }, [uppy]);
 
-  const onRemoveAndAbortFile = useCallback(
-    (position: number) => {
-      setProgress(0);
-      setIsSuccessfullyUpload(false);
-      onRemoveFile(position);
-      onAbortUpload();
-    },
-    [onRemoveFile, onAbortUpload]
-  );
-
-  const fileURL = useMemo(
-    () => files?.[0] && URL.createObjectURL(files[0]),
-    [files]
-  );
-
-  const file = useMemo(() => files[0], [files]);
+  useEffect(() => {
+    uppy.on('complete', (result) => {
+      const isSuccess = !!result?.successful?.length;
+      const isFailed = !!result?.failed?.length;
+      if (fileId && isSuccess) {
+        onSuccess?.(fileId);
+      }
+      if (isFailed) {
+        onError?.();
+      }
+    });
+  }, [uppy, fileId]);
 
   return (
     <Stack width="full" spacing="4" direction="column" {...props}>
-      {!file || (!isLoading && !isCompleted) ? (
-        <InputFile
-          id={'file-input-' + props.id}
-          onChange={(files) => onChangeFile(files[0])}
-          accept="video/*"
-        >
-          {children}
-        </InputFile>
-      ) : (
-        <InputFileList>
-          <InputFileListItem
-            fileURL={fileURL}
-            filename={file?.name}
-            size={file?.size}
-            isLoading={isLoading}
-            progress={isStart ? progress : 0}
-            success={isSuccessfullyUpload}
-            isFinished={isCompleted}
-            onRemoveFile={() => onRemoveAndAbortFile(0)}
-          />
-        </InputFileList>
-      )}
+      <Dashboard
+        width="100%"
+        height="100%"
+        note={locale?.note}
+        uppy={uppy}
+        locale={{
+          strings: locale
+        }}
+      />
     </Stack>
   );
 };

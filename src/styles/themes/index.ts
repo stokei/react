@@ -47,7 +47,7 @@ export const theme = (config?: StokeiThemeConfig) => {
       ...colors,
       ...themeColors
     },
-    fonts: {
+    fonts: config?.fonts && {
       ...config?.fonts,
       ...(config?.fonts?.heading && { heading: config?.fonts?.heading }),
       ...(config?.fonts?.normal && {

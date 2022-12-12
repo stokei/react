@@ -8,9 +8,21 @@ import { VideoUploader } from '.';
   component={VideoUploader}
   decorators={decorators}
   args={{
-    accountId: 'acc_stokei',
-    appId: 'app_stokei',
-    uploadURL: 'http://localhost:4000/v1/uploads/file_clba3xtd50002m26k5pj5oeky'
+    uploadURL: 'http://localhost:4000/v1/uploads/videos',
+    onSuccess: (file) => console.log({ file }),
+    onError: () => console.log('Upload video failed!'),
+    locale: {
+      dropPasteFiles: 'Adicione seu video abaixo',
+      back: 'Voltar',
+      save: 'Salvar',
+      cancel: 'Cancelar',
+      pauseUpload: 'Pausar carregamento',
+      retryUpload: 'Tente carregar novamente',
+      resumeUpload: 'Continuar o carregamento',
+      uploadPaused: 'Upload pausado',
+      uploadComplete: 'Upload completo',
+      myDevice: 'Meu dispositivo'
+    }
   }}
 />
 

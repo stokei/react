@@ -1,103 +1,107 @@
-import { useCallback, useMemo, useState } from 'react';
-import { MAX_IMAGE_SIZE } from '../../constants/file-sizes';
-import { useStorageUpload, useUploadFiles } from '../../hooks';
-import { InputFile } from '../input-file';
-import { InputFileList } from '../input-file-list';
-import { InputFileListItem } from '../input-file-list-item';
+import { useState, useEffect } from 'react';
+import Uppy from '@uppy/core';
+import { Dashboard, useUppy } from '@uppy/react';
+import Tus from '@uppy/tus';
+import ImageEditor from '@uppy/image-editor';
+import { MAX_VIDEO_SIZE } from '../../constants/file-sizes';
+import { useStokeiTheme } from '../../hooks';
+import { Locale } from '../../interfaces';
 import { Stack, StackProps } from '../stack';
+
+export type LocaleImageUploader = Locale<
+  | 'dropPasteFiles'
+  | 'note'
+  | 'save'
+  | 'cancel'
+  | 'pauseUpload'
+  | 'retryUpload'
+  | 'resumeUpload'
+  | 'uploadPaused'
+  | 'uploadComplete'
+  | 'myDevice'
+  | 'back'
+>;
 
 export interface ImageUploaderProps extends Omit<StackProps, 'onError'> {
   readonly id: string;
-  readonly accountId: string;
-  readonly appId: string;
   readonly uploadURL: string;
-  readonly onSuccess: (
-    file?: File | Blob | Pick<ReadableStreamDefaultReader, 'read'>
-  ) => void;
-  readonly onError: (
-    error: Error,
-    file?: File | Blob | Pick<ReadableStreamDefaultReader, 'read'>
-  ) => void;
+  readonly locale: LocaleImageUploader;
+  readonly accept?: string[];
+  readonly onSuccess: (fileId: string) => void;
+  readonly onError: () => void;
 }
 
 export const ImageUploader: React.FC<ImageUploaderProps> = ({
-  children,
+  accept,
   uploadURL,
-  accountId,
-  appId,
-  onError,
+  locale,
   onSuccess,
+  onError,
   ...props
 }) => {
-  const [progress, setProgress] = useState<number>(0);
-  const [isSuccessfullyUpload, setIsSuccessfullyUpload] =
-    useState<boolean>(false);
+  const [fileId, setFileId] = useState('');
 
-  const { files, onAddFiles, onRemoveFile } = useUploadFiles();
+  const { appId, accountId, cloudflareAPIToken } = useStokeiTheme();
 
-  const { isStart, isLoading, isCompleted, onStartUpload, onAbortUpload } =
-    useStorageUpload({
-      uploadURL,
-      accountId,
-      appId,
-      onError: (...args) => {
-        setIsSuccessfullyUpload(false);
-        onError?.(...args);
+  const uppy = useUppy(() => {
+    return new Uppy({
+      allowMultipleUploadBatches: false,
+      autoProceed: true,
+      restrictions: {
+        allowedFileTypes: accept || ['video/*'],
+        maxFileSize: MAX_VIDEO_SIZE,
+        maxNumberOfFiles: 1,
+        minNumberOfFiles: 1
       },
-      onSuccess: (...args) => {
-        setIsSuccessfullyUpload(true);
-        onSuccess?.(...args);
-      },
-      onProgress: setProgress
+      meta: {
+        accountId,
+        appId
+      }
+    })
+      .use(Tus, {
+        endpoint: uploadURL,
+        headers: {
+          Authorization: `Bearer ${cloudflareAPIToken}`
+        },
+        onAfterResponse(req, res) {
+          const body = res.getBody();
+          const bodyFormated = body && JSON.parse(body);
+          if (bodyFormated?.file?.id) {
+            setFileId(bodyFormated?.file?.id);
+          }
+        }
+      })
+      .use(ImageEditor, { target: Dashboard });
+  });
+
+  useEffect(() => {
+    return () => uppy.close({ reason: 'unmount' });
+  }, [uppy]);
+
+  useEffect(() => {
+    uppy.on('complete', (result) => {
+      const isSuccess = !!result?.successful?.length;
+      const isFailed = !!result?.failed?.length;
+      if (fileId && isSuccess) {
+        onSuccess?.(fileId);
+      }
+      if (isFailed) {
+        onError?.();
+      }
     });
-
-  const onChangeFile = useCallback(
-    (file: File) => {
-      onAddFiles([file]);
-      onStartUpload(file);
-    },
-    [onStartUpload, onAddFiles]
-  );
-
-  const onRemoveAndAbortFile = useCallback(
-    (position: number) => {
-      setProgress(0);
-      setIsSuccessfullyUpload(false);
-      onRemoveFile(position);
-      onAbortUpload();
-    },
-    [onRemoveFile, onAbortUpload]
-  );
-
-  const fileURL = useMemo(
-    () => files?.[0] && URL.createObjectURL(files[0]),
-    [files]
-  );
+  }, [uppy, fileId]);
 
   return (
     <Stack width="full" spacing="4" direction="column" {...props}>
-      {!isLoading && !isCompleted ? (
-        <InputFile
-          id={'file-input-' + props.id}
-          accept="image/*"
-          maxSize={MAX_IMAGE_SIZE}
-          onChange={(files) => onChangeFile(files[0])}
-        >
-          {children}
-        </InputFile>
-      ) : (
-        <InputFileList>
-          <InputFileListItem
-            fileURL={fileURL}
-            filename={files?.[0]?.name}
-            size={files?.[0]?.size}
-            progress={isStart ? progress : 0}
-            success={isSuccessfullyUpload}
-            isFinished={isCompleted}
-            onRemoveFile={() => onRemoveAndAbortFile(0)}
-          />
-        </InputFileList>
-      )}
+      <Dashboard
+        width="100%"
+        height="100%"
+        note={locale?.note}
+        uppy={uppy}
+        locale={{
+          strings: locale
+        }}
+      />
     </Stack>
   );
 };
