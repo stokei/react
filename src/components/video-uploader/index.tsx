@@ -45,7 +45,6 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
   const uppy = useUppy(() => {
     return new Uppy({
       allowMultipleUploadBatches: false,
-      autoProceed: true,
       restrictions: {
         allowedFileTypes: accept || ['video/*'],
         maxFileSize: MAX_VIDEO_SIZE,
@@ -58,6 +57,7 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
       }
     }).use(Tus, {
       endpoint: uploadURL,
+      removeFingerprintOnSuccess: true,
       headers: {
         Authorization: `Bearer ${cloudflareAPIToken}`
       },
@@ -76,17 +76,22 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
   }, [uppy]);
 
   useEffect(() => {
-    uppy.on('complete', (result) => {
-      const isSuccess = !!result?.successful?.length;
-      const isFailed = !!result?.failed?.length;
+    uppy.on('upload-success', (result) => {
+      const isSuccess = !!result?.data;
       if (fileId && isSuccess) {
         onSuccess?.(fileId);
       }
+    });
+  }, [uppy, fileId]);
+
+  useEffect(() => {
+    uppy.on('upload-error', (result) => {
+      const isFailed = !!result?.data;
       if (isFailed) {
         onError?.();
       }
     });
-  }, [uppy, fileId]);
+  }, [uppy]);
 
   return (
     <Stack width="full" spacing="4" direction="column" {...props}>

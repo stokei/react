@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Uppy from '@uppy/core';
 import { Dashboard, useUppy } from '@uppy/react';
-import Tus from '@uppy/tus';
+import XHRUpload from '@uppy/xhr-upload';
 import ImageEditor from '@uppy/image-editor';
 import { MAX_VIDEO_SIZE } from '../../constants/file-sizes';
 import { useStokeiTheme } from '../../hooks';
@@ -32,6 +32,7 @@ export interface ImageUploaderProps extends Omit<StackProps, 'onError'> {
 }
 
 export const ImageUploader: React.FC<ImageUploaderProps> = ({
+  id,
   accept,
   uploadURL,
   locale,
@@ -46,32 +47,34 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   const uppy = useUppy(() => {
     return new Uppy({
       allowMultipleUploadBatches: false,
-      autoProceed: true,
       restrictions: {
-        allowedFileTypes: accept || ['video/*'],
+        allowedFileTypes: accept || ['image/*'],
         maxFileSize: MAX_VIDEO_SIZE,
         maxNumberOfFiles: 1,
         minNumberOfFiles: 1
-      },
-      meta: {
-        accountId,
-        appId
       }
     })
-      .use(Tus, {
+      .use(XHRUpload, {
         endpoint: uploadURL,
+        method: 'POST',
+        formData: true,
+        fieldName: 'file',
+        limit: 1,
         headers: {
-          Authorization: `Bearer ${cloudflareAPIToken}`
+          // Authorization: `Bearer ${cloudflareAPIToken}`
         },
-        onAfterResponse(req, res) {
-          const body = res.getBody();
-          const bodyFormated = body && JSON.parse(body);
-          if (bodyFormated?.file?.id) {
-            setFileId(bodyFormated?.file?.id);
+        getResponseData(responseText, response) {
+          if (!response) {
+            return;
           }
+          const body = responseText && JSON.parse(responseText);
+          console.log(body);
+          return {
+            fileName: responseText
+          };
         }
       })
-      .use(ImageEditor, { target: Dashboard });
+      .use(ImageEditor, { quality: 0.9, target: id });
   });
 
   useEffect(() => {
@@ -79,17 +82,24 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   }, [uppy]);
 
   useEffect(() => {
-    uppy.on('complete', (result) => {
-      const isSuccess = !!result?.successful?.length;
-      const isFailed = !!result?.failed?.length;
+    uppy.on('upload-success', (result, response) => {
+      const isSuccess = !!result?.data;
+      console.log(response);
       if (fileId && isSuccess) {
         onSuccess?.(fileId);
       }
+    });
+  }, [uppy, fileId]);
+
+  useEffect(() => {
+    uppy.on('upload-error', (result, error) => {
+      console.log(error);
+      const isFailed = !!result?.data;
       if (isFailed) {
         onError?.();
       }
     });
-  }, [uppy, fileId]);
+  }, [uppy]);
 
   return (
     <Stack width="full" spacing="4" direction="column" {...props}>
@@ -98,6 +108,9 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         height="100%"
         note={locale?.note}
         uppy={uppy}
+        lang="pt-br"
+        target={id}
+        plugins={['ImageEditor']}
         locale={{
           strings: locale
         }}
