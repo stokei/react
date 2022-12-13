@@ -1,33 +1,18 @@
-import { useState, useEffect } from 'react';
 import Uppy from '@uppy/core';
+import ImageEditor from '@uppy/image-editor';
 import { Dashboard, useUppy } from '@uppy/react';
 import XHRUpload from '@uppy/xhr-upload';
-import ImageEditor from '@uppy/image-editor';
-import { MAX_VIDEO_SIZE } from '../../constants/file-sizes';
+import { useEffect, useMemo } from 'react';
+import { MAX_IMAGE_SIZE } from '../../constants/file-sizes';
 import { useStokeiTheme } from '../../hooks';
-import { Locale } from '../../interfaces';
+import { getUploaderLanguage } from '../../utils/get-uploader-language';
 import { Stack, StackProps } from '../stack';
-
-export type LocaleImageUploader = Locale<
-  | 'dropPasteFiles'
-  | 'note'
-  | 'save'
-  | 'cancel'
-  | 'pauseUpload'
-  | 'retryUpload'
-  | 'resumeUpload'
-  | 'uploadPaused'
-  | 'uploadComplete'
-  | 'myDevice'
-  | 'back'
->;
 
 export interface ImageUploaderProps extends Omit<StackProps, 'onError'> {
   readonly id: string;
   readonly uploadURL: string;
-  readonly locale: LocaleImageUploader;
   readonly accept?: string[];
-  readonly onSuccess: (fileId: string) => void;
+  readonly onSuccess: () => void;
   readonly onError: () => void;
 }
 
@@ -35,21 +20,24 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   id,
   accept,
   uploadURL,
-  locale,
   onSuccess,
   onError,
   ...props
 }) => {
-  const [fileId, setFileId] = useState('');
+  const { language } = useStokeiTheme();
 
-  const { appId, accountId, cloudflareAPIToken } = useStokeiTheme();
+  const currentLanguage = useMemo(
+    () => getUploaderLanguage(language),
+    [language]
+  );
 
   const uppy = useUppy(() => {
     return new Uppy({
+      locale: currentLanguage,
       allowMultipleUploadBatches: false,
       restrictions: {
         allowedFileTypes: accept || ['image/*'],
-        maxFileSize: MAX_VIDEO_SIZE,
+        maxFileSize: MAX_IMAGE_SIZE,
         maxNumberOfFiles: 1,
         minNumberOfFiles: 1
       }
@@ -60,18 +48,14 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         formData: true,
         fieldName: 'file',
         limit: 1,
-        headers: {
-          // Authorization: `Bearer ${cloudflareAPIToken}`
-        },
+        allowedMetaFields: [],
         getResponseData(responseText, response) {
           if (!response) {
             return;
           }
-          const body = responseText && JSON.parse(responseText);
-          console.log(body);
-          return {
-            fileName: responseText
-          };
+          const responseData: any = response;
+          const bodyData = responseData.response;
+          return bodyData;
         }
       })
       .use(ImageEditor, { quality: 0.9, target: id });
@@ -82,38 +66,32 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   }, [uppy]);
 
   useEffect(() => {
-    uppy.on('upload-success', (result, response) => {
+    uppy.on('upload-success', (result) => {
       const isSuccess = !!result?.data;
-      console.log(response);
-      if (fileId && isSuccess) {
-        onSuccess?.(fileId);
+      if (isSuccess) {
+        onSuccess?.();
       }
     });
-  }, [uppy, fileId]);
+  }, [uppy, onSuccess]);
 
   useEffect(() => {
-    uppy.on('upload-error', (result, error) => {
-      console.log(error);
+    uppy.on('upload-error', (result) => {
       const isFailed = !!result?.data;
       if (isFailed) {
         onError?.();
       }
     });
-  }, [uppy]);
+  }, [uppy, onError]);
 
   return (
     <Stack width="full" spacing="4" direction="column" {...props}>
       <Dashboard
         width="100%"
         height="100%"
-        note={locale?.note}
         uppy={uppy}
         lang="pt-br"
         target={id}
         plugins={['ImageEditor']}
-        locale={{
-          strings: locale
-        }}
       />
     </Stack>
   );

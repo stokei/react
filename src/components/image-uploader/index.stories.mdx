@@ -8,29 +8,14 @@ import { ImageUploader } from '.';
   component={ImageUploader}
   decorators={decorators}
   args={{
-    uploadURL: 'http://localhost:4000/v1/uploads/images',
-    onSuccess: (file) => console.log({ file }),
-    onError: () => console.log('Upload image failed!'),
-    locale: {
-      dropPasteFiles: 'Adicione seu image abaixo',
-      back: 'Voltar',
-      save: 'Salvar',
-      cancel: 'Cancelar',
-      pauseUpload: 'Pausar carregamento',
-      retryUpload: 'Tente carregar novamente',
-      resumeUpload: 'Continuar o carregamento',
-      uploadPaused: 'Upload pausado',
-      uploadComplete: 'Upload completo',
-      myDevice: 'Meu dispositivo'
-    }
+    uploadURL:
+      'https://upload.imagedelivery.net/ey28NNRkf28Ju7xY8o7Zsw/13d85576-517d-4f60-8672-663f79818800',
+    onSuccess: () => console.log('Upload image successfully!'),
+    onError: () => console.log('Upload image failed!')
   }}
 />
 
-export const Template = (args) => (
-  <ImageUploader {...args}>
-    <Text>Clique aqui para adicionar o seu image</Text>
-  </ImageUploader>
-);
+export const Template = (args) => <ImageUploader {...args} />;
 
 # ImageUploader
 

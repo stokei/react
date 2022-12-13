@@ -1,3 +1,3 @@
 export * from './colors';
-export * from './locale';
+export * from './language';
 export * from './theme.interface';

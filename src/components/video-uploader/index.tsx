@@ -1,30 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Uppy from '@uppy/core';
 import { Dashboard, useUppy } from '@uppy/react';
 import Tus from '@uppy/tus';
 import { MAX_VIDEO_SIZE } from '../../constants/file-sizes';
 import { useStokeiTheme } from '../../hooks';
-import { Locale } from '../../interfaces';
 import { Stack, StackProps } from '../stack';
-
-export type LocaleVideoUploader = Locale<
-  | 'dropPasteFiles'
-  | 'note'
-  | 'save'
-  | 'cancel'
-  | 'pauseUpload'
-  | 'retryUpload'
-  | 'resumeUpload'
-  | 'uploadPaused'
-  | 'uploadComplete'
-  | 'myDevice'
-  | 'back'
->;
+import { getUploaderLanguage } from '../../utils/get-uploader-language';
 
 export interface VideoUploaderProps extends Omit<StackProps, 'onError'> {
   readonly id: string;
   readonly uploadURL: string;
-  readonly locale: LocaleVideoUploader;
   readonly accept?: string[];
   readonly onSuccess: (fileId: string) => void;
   readonly onError: () => void;
@@ -33,17 +18,22 @@ export interface VideoUploaderProps extends Omit<StackProps, 'onError'> {
 export const VideoUploader: React.FC<VideoUploaderProps> = ({
   accept,
   uploadURL,
-  locale,
   onSuccess,
   onError,
   ...props
 }) => {
   const [fileId, setFileId] = useState('');
 
-  const { appId, accountId, cloudflareAPIToken } = useStokeiTheme();
+  const { appId, accountId, cloudflareAPIToken, language } = useStokeiTheme();
+
+  const currentLanguage = useMemo(
+    () => getUploaderLanguage(language),
+    [language]
+  );
 
   const uppy = useUppy(() => {
     return new Uppy({
+      locale: currentLanguage,
       allowMultipleUploadBatches: false,
       restrictions: {
         allowedFileTypes: accept || ['video/*'],
@@ -82,7 +72,7 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
         onSuccess?.(fileId);
       }
     });
-  }, [uppy, fileId]);
+  }, [uppy, fileId, onSuccess]);
 
   useEffect(() => {
     uppy.on('upload-error', (result) => {
@@ -91,19 +81,11 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
         onError?.();
       }
     });
-  }, [uppy]);
+  }, [uppy, onError]);
 
   return (
     <Stack width="full" spacing="4" direction="column" {...props}>
-      <Dashboard
-        width="100%"
-        height="100%"
-        note={locale?.note}
-        uppy={uppy}
-        locale={{
-          strings: locale
-        }}
-      />
+      <Dashboard width="100%" height="100%" uppy={uppy} />
     </Stack>
   );
 };

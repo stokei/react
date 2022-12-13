@@ -3887,6 +3887,11 @@
     "@uppy/utils" "^5.0.2"
     preact "^10.5.13"
 
+"@uppy/locales@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@uppy/locales/-/locales-3.0.4.tgz#64aa8b99379ee9c945653691b74c67a82e05a96b"
+  integrity sha512-KOey5lGxaCRufWE95n3muiJsx1BHx9braHixDukeH89SDETMMGANT+wwSSPOUjIOnNzJKBin0oqoGULQV5lPaA==
+
 "@uppy/progress-bar@^3.0.1":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@uppy/progress-bar/-/progress-bar-3.0.1.tgz#517748a6b558ceba4b76f25000416bc3f883a001"
