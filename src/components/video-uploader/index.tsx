@@ -51,6 +51,9 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
       headers: {
         Authorization: `Bearer ${cloudflareAPIToken}`
       },
+      onShouldRetry() {
+        return false;
+      },
       onAfterResponse(req, res) {
         const body = res.getBody();
         const bodyFormated = body && JSON.parse(body);
@@ -85,7 +88,13 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
 
   return (
     <Stack width="full" spacing="4" direction="column" {...props}>
-      <Dashboard width="100%" height="100%" uppy={uppy} />
+      <Dashboard
+        width="100%"
+        height="100%"
+        uppy={uppy}
+        doneButtonHandler={() => {}}
+        hideProgressAfterFinish
+      />
     </Stack>
   );
 };

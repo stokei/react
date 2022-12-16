@@ -8,7 +8,7 @@ import { VideoUploader } from '.';
   component={VideoUploader}
   decorators={decorators}
   args={{
-    uploadURL: 'http://localhost:4000/v1/uploads/videos',
+    uploadURL: 'http://localhost:4000/v1/uploads/videos/development',
     onSuccess: (file) => console.log({ file }),
     onError: () => console.log('Upload video failed!'),
     locale: {

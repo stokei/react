@@ -89,9 +89,10 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         width="100%"
         height="100%"
         uppy={uppy}
-        lang="pt-br"
         target={id}
         plugins={['ImageEditor']}
+        doneButtonHandler={() => {}}
+        hideProgressAfterFinish
       />
     </Stack>
   );
