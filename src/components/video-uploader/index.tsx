@@ -3,7 +3,7 @@ import Uppy from '@uppy/core';
 import { Dashboard, useUppy } from '@uppy/react';
 import Tus from '@uppy/tus';
 import { MAX_VIDEO_SIZE } from '../../constants/file-sizes';
-import { useStokeiTheme } from '../../hooks';
+import { useStokei } from '../../hooks';
 import { Stack, StackProps } from '../stack';
 import { getUploaderLanguage } from '../../utils/get-uploader-language';
 
@@ -24,7 +24,7 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
 }) => {
   const [fileId, setFileId] = useState('');
 
-  const { appId, accountId, cloudflareAPIToken, language } = useStokeiTheme();
+  const { appId, accountId, cloudflareAPIToken, language } = useStokei();
 
   const currentLanguage = useMemo(
     () => getUploaderLanguage(language),

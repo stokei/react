@@ -1,17 +1,17 @@
 import { themes, ThemeProvider, ensure } from '@storybook/theming';
 
-import { StokeiThemeProvider } from '../../contexts';
+import { StokeiProvider } from '../../contexts';
 
 export const decorators = [
   (Story: any) => (
     <ThemeProvider theme={ensure(themes.light)}>
-      <StokeiThemeProvider
+      <StokeiProvider
         appId="app_stokei"
         accountId="acc_stokei"
         cloudflareAPIToken="xamNZPUFI3b1w28ExLjTaOWM9qpu-s23hebKFzGq"
       >
         {Story()}
-      </StokeiThemeProvider>
+      </StokeiProvider>
     </ThemeProvider>
   )
 ];

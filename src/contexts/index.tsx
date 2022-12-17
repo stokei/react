@@ -1,2 +1,2 @@
-export * from './theme';
+export * from './stokei';
 export * from './video-player';

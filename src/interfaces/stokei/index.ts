@@ -1,4 +1,4 @@
-export interface StokeiThemeConfigColor {
+export interface StokeiConfigColor {
   readonly text?: string;
   readonly heading?: string;
   readonly primary?: string;
@@ -8,12 +8,12 @@ export interface StokeiThemeConfigColor {
   readonly warning?: string;
   readonly info?: string;
 }
-export interface StokeiThemeConfigFont {
+export interface StokeiConfigFont {
   readonly heading?: string;
   readonly normal?: string;
 }
 
-export interface StokeiThemeConfig {
-  readonly colors?: StokeiThemeConfigColor;
-  readonly fonts?: StokeiThemeConfigFont;
+export interface StokeiConfig {
+  readonly colors?: StokeiConfigColor;
+  readonly fonts?: StokeiConfigFont;
 }

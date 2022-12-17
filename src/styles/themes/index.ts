@@ -1,5 +1,5 @@
 import { extendTheme } from '@chakra-ui/react';
-import { StokeiThemeConfig, StokeiThemeConfigColor } from '../../interfaces';
+import { StokeiConfig, StokeiConfigColor } from '../../interfaces';
 import {
   generatePalette,
   generatePaletteToChakraUI
@@ -11,7 +11,7 @@ import { foundations } from './foundations';
 export * from './colors';
 export { generatePalette, generatePaletteToChakraUI };
 
-const setThemeConfigColors = (colors?: StokeiThemeConfigColor) => ({
+const setThemeConfigColors = (colors?: StokeiConfigColor) => ({
   ...(colors?.text && generatePaletteToChakraUI('text', colors?.text)),
   ...(colors?.heading && generatePaletteToChakraUI('heading', colors?.heading)),
   ...(colors?.primary && generatePaletteToChakraUI('primary', colors?.primary)),
@@ -23,7 +23,7 @@ const setThemeConfigColors = (colors?: StokeiThemeConfigColor) => ({
   ...(colors?.info && generatePaletteToChakraUI('info', colors?.info))
 });
 
-export const theme = (config?: StokeiThemeConfig) => {
+export const theme = (config?: StokeiConfig) => {
   const themeColors = setThemeConfigColors(config?.colors);
   return extendTheme({
     ...components,

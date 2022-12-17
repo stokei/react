@@ -10,19 +10,7 @@ import { VideoUploader } from '.';
   args={{
     uploadURL: 'http://localhost:4000/v1/uploads/videos/development',
     onSuccess: (file) => console.log({ file }),
-    onError: () => console.log('Upload video failed!'),
-    locale: {
-      dropPasteFiles: 'Adicione seu video abaixo',
-      back: 'Voltar',
-      save: 'Salvar',
-      cancel: 'Cancelar',
-      pauseUpload: 'Pausar carregamento',
-      retryUpload: 'Tente carregar novamente',
-      resumeUpload: 'Continuar o carregamento',
-      uploadPaused: 'Upload pausado',
-      uploadComplete: 'Upload completo',
-      myDevice: 'Meu dispositivo'
-    }
+    onError: () => console.log('Upload video failed!')
   }}
 />
 

@@ -1,34 +1,32 @@
 export { ColorModeScript } from '@chakra-ui/react';
 import { ChakraProvider } from '@chakra-ui/react';
 import React, { PropsWithChildren, useMemo } from 'react';
-import { Language, StokeiThemeConfig } from '../../interfaces';
+import { Language, StokeiConfig } from '../../interfaces';
 import { theme } from '../../styles/themes';
 
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import '@uppy/image-editor/dist/style.css';
 
-export interface StokeiThemeContextValues {
+export interface StokeiContextValues {
   readonly appId: string;
   readonly accountId?: string;
   readonly language?: Language;
   readonly cloudflareAPIToken: string;
 }
 
-export interface StokeiThemeContextProps {
+export interface StokeiContextProps {
   readonly appId: string;
   readonly accountId?: string;
   readonly cloudflareAPIToken: string;
   readonly language?: Language;
-  readonly config?: StokeiThemeConfig;
+  readonly config?: StokeiConfig;
 }
 
-export const StokeiThemeContext = React.createContext(
-  {} as StokeiThemeContextValues
-);
+export const StokeiContext = React.createContext({} as StokeiContextValues);
 
-export const StokeiThemeProvider: React.FC<
-  PropsWithChildren<StokeiThemeContextProps>
+export const StokeiProvider: React.FC<
+  PropsWithChildren<StokeiContextProps>
 > = ({ children, config, appId, accountId, cloudflareAPIToken, language }) => {
   const themeData = useMemo(() => theme(config), []);
   const stokeiConfig = useMemo(
@@ -37,9 +35,9 @@ export const StokeiThemeProvider: React.FC<
   );
   return (
     <ChakraProvider theme={themeData}>
-      <StokeiThemeContext.Provider value={stokeiConfig}>
+      <StokeiContext.Provider value={stokeiConfig}>
         {children}
-      </StokeiThemeContext.Provider>
+      </StokeiContext.Provider>
     </ChakraProvider>
   );
 };

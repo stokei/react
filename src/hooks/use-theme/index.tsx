@@ -1,5 +1,5 @@
 import { useContext } from 'react';
 
-import { StokeiThemeContext } from '../../contexts';
+import { StokeiContext } from '../../contexts';
 
-export const useStokeiTheme = () => useContext(StokeiThemeContext);
+export const useStokei = () => useContext(StokeiContext);
