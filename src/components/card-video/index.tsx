@@ -1,10 +1,9 @@
 import React from 'react';
+import { VideoPlayerProps, VideoPlayer } from '../video-player';
 import {
-  VideoPlayerProps,
-  VideoPlayer,
   VideoPlayerPosterProps,
   VideoPlayerPoster
-} from '../video-player';
+} from '../video-player-poster';
 
 export interface CardVideoProps extends VideoPlayerProps {}
 export const CardVideo: React.FC<CardVideoProps> = ({ ...props }) => (
