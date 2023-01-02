@@ -36,8 +36,8 @@
     "react-dom": ">=18"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.0.15",
     "@chakra-ui/react": "^2.4.1",
-    "@choc-ui/chakra-autocomplete": "^5.1.1",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@typescript-eslint/eslint-plugin": "^5.43.0",

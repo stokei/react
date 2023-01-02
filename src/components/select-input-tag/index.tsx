@@ -1,12 +1,8 @@
 import { PropsWithChildren } from 'react';
-import { AutoCompleteTag } from '@choc-ui/chakra-autocomplete';
+import { Tag, TagProps } from '../';
 
-export interface SelectInputTagProps {
-  disabled?: boolean;
-  label: string;
-  onRemove?: () => void;
-}
+export interface SelectInputTagProps extends TagProps {}
 
 export const SelectInputTag: React.FC<
   PropsWithChildren<SelectInputTagProps>
-> = ({ ...props }) => <AutoCompleteTag {...props} />;
+> = ({ ...props }) => <Tag {...props} />;
