@@ -11,6 +11,7 @@ export interface SelectContextValues {
   readonly onOpenList: () => void;
   readonly onCloseList: () => void;
   readonly onChooseItem: (value: string) => void;
+  readonly onRemoveChooseItem: (value: string) => void;
 }
 
 export interface SelectContextProps {
@@ -21,6 +22,7 @@ export interface SelectContextProps {
   readonly onOpenList: () => void;
   readonly onCloseList: () => void;
   readonly onChooseItem: (value: string) => void;
+  readonly onRemoveChooseItem: (value: string) => void;
 }
 
 export const SelectContext = React.createContext({} as SelectContextValues);
@@ -35,6 +37,7 @@ export const SelectProvider: React.FC<
   onOpenList,
   onCloseList,
   onChooseItem,
+  onRemoveChooseItem,
   value
 }) => {
   const configValues: SelectContextValues = useMemo(
@@ -45,6 +48,7 @@ export const SelectProvider: React.FC<
       onOpenList,
       onCloseList,
       onChooseItem,
+      onRemoveChooseItem,
       value
     }),
     [
@@ -54,6 +58,7 @@ export const SelectProvider: React.FC<
       onOpenList,
       onCloseList,
       onChooseItem,
+      onRemoveChooseItem,
       value
     ]
   );

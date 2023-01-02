@@ -10,11 +10,23 @@ export interface SelectProps extends Omit<StackProps, 'onChange'> {
   readonly isDisabled?: boolean;
   readonly value: any;
   readonly onChooseItem: (value: string) => void;
+  readonly onRemoveChooseItem: (value: string) => void;
   readonly ref?: ForwardedRef<any>;
 }
 
 export const Select: React.FC<SelectProps> = forwardRef(
-  ({ children, isDisabled, isLoading, value, onChooseItem, ...props }, ref) => {
+  (
+    {
+      children,
+      isDisabled,
+      isLoading,
+      value,
+      onChooseItem,
+      onRemoveChooseItem,
+      ...props
+    },
+    ref
+  ) => {
     const {
       isOpen: isOpenList,
       onOpen: onOpenList,
@@ -24,6 +36,7 @@ export const Select: React.FC<SelectProps> = forwardRef(
       <SelectProvider
         value={value}
         onChooseItem={onChooseItem}
+        onRemoveChooseItem={onRemoveChooseItem}
         isOpenList={isOpenList}
         isLoading={isLoading}
         isDisabled={isDisabled}

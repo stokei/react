@@ -29,6 +29,9 @@ export const Primary = ({ ...args }) => {
         onChooseItem={(option) =>
           setItems((currentItems) => [...currentItems, option])
         }
+        onRemoveChooseItem={(option) =>
+          setItems((currentItems) => [...currentItems, option])
+        }
       >
         <SelectInput id="teste" />
         <SelectList containerRef={ref}>
